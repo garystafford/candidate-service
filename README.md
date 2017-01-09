@@ -1,6 +1,4 @@
-[![Build Status](https://travis-ci.org/garystafford/candidate-service.svg?branch=master)](https://travis-ci.org/garystafford/candidate-service) [![Dependencies](https://app.updateimpact.com/badge/817200262778327040/candidate-service.svg?config=compile)](https://app.updateimpact.com/latest/817200262778327040/candidate-service)
-
-# com.example.candidate.Candidate Service
+# Candidate Service
 
 ## Introduction
 
@@ -8,7 +6,7 @@ The Candidate [Spring Boot](https://projects.spring.io/spring-boot/) RESTful Web
 
 ## Quick Start for Local Development
 
-The com.example.candidate.Candidate service requires MongoDB to be pre-installed and running locally, on port `27017`. To clone, build, test, and run the com.example.candidate.Candidate service, locally:
+The Candidate service requires MongoDB to be pre-installed and running locally, on port `27017`. To clone, build, test, and run the Candidate service, locally:
 
 ```bash
 git clone https://github.com/garystafford/candidate-service.git
@@ -24,12 +22,13 @@ By default, the service runs on `localhost`, port `8097`. By default, the servic
 Purpose                                                                                                                  | Method  | Endpoint
 ------------------------------------------------------------------------------------------------------------------------ | :------ | :----------------------------------------------------
 Create Random Sample Data                                                                                                | GET     | [/simulation](http://localhost:8097/simulation)
-Submit New Candidate                                                                                                              | POST    | [/candidates](http://localhost:8097/candidates)
+Submit New Candidate                                                                                                     | POST    | [/candidates](http://localhost:8097/candidates)
+Candidate List                                                                                                           | GET     | [/candidates/summary](http://localhost:8097/candidates/summary)
 Service Info                                                                                                             | GET     | [/info](http://localhost:8097/info)
 Service Health                                                                                                           | GET     | [/health](http://localhost:8097/health)
 Service Metrics                                                                                                          | GET     | [/metrics](http://localhost:8097/metrics)
 Other [Spring Actuator](http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready) endpoints | GET     | `/mappings`, `/env`, `/configprops`, etc.
-Other [HATEOAS](https://spring.io/guides/gs/rest-hateoas) endpoints for `/candidates`                                         | Various | DELETE, PATCH, PUT, page sort, size, etc.
+Other [HATEOAS](https://spring.io/guides/gs/rest-hateoas) endpoints for `/candidates`                                    | Various | DELETE, PATCH, PUT, page sort, size, etc.
 
 The [HAL Browser](https://github.com/mikekelly/hal-browser) API browser for the `hal+json` media type is installed alongside the service. It can be accessed at `http://localhost:8097/actuator/`.
 
