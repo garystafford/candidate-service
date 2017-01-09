@@ -40,7 +40,10 @@ Adding a new candidate, requires an HTTP `POST` request to the `/candidates` end
 HTTPie
 
 ```text
-http POST http://localhost:8097/candidates candidate="Jill Stein"
+http POST http://localhost:8097/candidates /
+  firstName='Mary' /
+  lastName='Smith' /
+  politicalParty='Test Party'
 ```
 
 cURL
@@ -48,7 +51,7 @@ cURL
 ```text
 curl -X POST \
   -H "Content-Type: application/json" \
-  -d '{ "candidate": "Jill Stein" }' \
+  -d '{ "firstName": "Mary", "lastName": "Smith", "politicalParty": "Test Party" }' \
   "http://localhost:8097/candidates"
 ```
 
@@ -57,7 +60,7 @@ wget
 ```text
 wget --method POST \
   --header 'content-type: application/json' \
-  --body-data '{ "candidate": "Jill Stein" }' \
+  --body-data '{ "firstName": "Mary", "lastName": "Smith", "politicalParty": "Test Party" }' \
   --no-verbose \
   --output-document - http://localhost:8097/candidates
 ```
@@ -70,14 +73,71 @@ Using [HTTPie](https://httpie.org/) command line HTTP client.
 
 ```json
 {
-    "candidates": [
-        "Chris Keniston",
-        "Darrell Castle",
-        "Donald Trump",
-        "Gary Johnson",
-        "Hillary Clinton",
-        "Jill Stein"
-    ]
+    "_embedded": {
+        "candidates": [
+            {
+                "_links": {
+                    "candidate": {
+                        "href": "http://localhost:8097/candidates/5872517ea6e0de568921e77a"
+                    },
+                    "self": {
+                        "href": "http://localhost:8097/candidates/5872517ea6e0de568921e77a"
+                    }
+                },
+                "firstName": "Donald",
+                "fullName": "Donald Trump",
+                "lastName": "Trump",
+                "politicalParty": "Republican Party"
+            },
+            {
+                "_links": {
+                    "candidate": {
+                        "href": "http://localhost:8097/candidates/5872517ea6e0de568921e77f"
+                    },
+                    "self": {
+                        "href": "http://localhost:8097/candidates/5872517ea6e0de568921e77f"
+                    }
+                },
+                "firstName": "Hillary",
+                "fullName": "Hillary Clinton",
+                "lastName": "Clinton",
+                "politicalParty": "Democratic Party"
+            }
+        ]
+    },
+    "_links": {
+        "profile": {
+            "href": "http://localhost:8097/profile/candidates"
+        },
+        "self": {
+            "href": "http://localhost:8097/candidates"
+        }
+    },
+    "page": {
+        "number": 0,
+        "size": 20,
+        "totalElements": 2,
+        "totalPages": 1
+    }
+}
+```
+
+`http POST http://localhost:8097/candidates firstName='John' lastName='Doe' politicalParty='Test Party'`
+
+```json
+{
+    "_links": {
+        "candidate": {
+            "href": "http://localhost:8097/candidates/5872de29a6e0de6ff01bd452"
+        },
+        "self": {
+            "href": "http://localhost:8097/candidates/5872de29a6e0de6ff01bd452"
+        }
+    },
+    "firstName": "John",
+    "fullName": "John Doe",
+    "lastName": "Doe",
+    "politicalParty": "Test Party"
 }
 ```
 
@@ -89,36 +149,20 @@ Using [HTTPie](https://httpie.org/) command line HTTP client.
 }
 ```
 
-`http POST http://localhost:8099/candidates candidate="Jill Stein"`
-
-```json
-{
-    "_links": {
-        "self": {
-            "href": "http://localhost:8099/candidates/58279bda909a021142712fe7"
-        },
-        "candidate": {
-            "href": "http://localhost:8099/candidates/58279bda909a021142712fe7"
-        }
-    },
-    "candidate": "Jill Stein"
-}
-```
-
 ## Continuous Integration
 
-The project's source code is continuously built and tested on every commit to [GitHub](https://github.com/garystafford/candidate-service), using [Travis CI](https://travis-ci.org/garystafford/candidate-service). If all unit tests pass, the resulting Spring Boot JAR is pushed to the `artifacts` branch of the [candidate-service-artifacts](https://github.com/garystafford/candidate-service-artifacts) GitHub repository. The JAR's filename is incremented with each successful build (i.e. `candidate-service-0.2.10.jar`).
+The project's source code is continuously built and tested on every commit to [GitHub](https://github.com/garystafford/candidate-service), using [Travis CI](https://travis-ci.org/garystafford/candidate-service). If all unit tests pass, the resulting Spring Boot JAR is pushed to the `artifacts` branch of the [candidate-service-artifacts](https://github.com/garystafford/candidate-service-artifacts) GitHub repository. The JAR's filename is incremented with each successful build (i.e. `candidate-service-0.1.10.jar`).
 
-![com.example.candidate.Vote Continuous Integration Pipeline](com.example.candidate.Candidate-CI.png)
+![Vote Continuous Integration Pipeline](Candidate-CI.png)
 
 ## Spring Profiles
 
-The com.example.candidate.Candidate service includes (3) Spring Boot Profiles, in a multi-profile YAML document: `src/main/resources/application.yml`. The profiles are `default`, `aws-production`, and `docker-production`. You will need to ensure your MongoDB instance is available at that `host` address and port of the profile you choose, or you may override the profile's properties.
+The Candidate service includes (3) Spring Boot Profiles, in a multi-profile YAML document: `src/main/resources/application.yml`. The profiles are `default`, `aws-production`, and `docker-production`. You will need to ensure your MongoDB instance is available at that `host` address and port of the profile you choose, or you may override the profile's properties.
 
 
 ```yaml
 server:
-  port: 8099
+  port: 8097
 data:
   mongodb:
     host: localhost
@@ -131,6 +175,12 @@ info:
   java:
     source: ${java.version}
     target: ${java.version}
+management:
+  info:
+    git:
+      mode: full
+    build:
+      enabled: true
 ---
 spring:
   profiles: aws-production
@@ -140,6 +190,19 @@ data:
 logging:
   level:
     root: WARN
+management:
+  info:
+    git:
+      enabled: false
+    build:
+      enabled: false
+endpoints:
+  sensitive: true
+  enabled: false
+  info:
+    enabled: true
+  health:
+    enabled: true
 ---
 spring:
   profiles: docker-production
@@ -149,12 +212,25 @@ data:
 logging:
   level:
     root: WARN
+management:
+  info:
+    git:
+      enabled: false
+    build:
+      enabled: false
+endpoints:
+  sensitive: true
+  enabled: false
+  info:
+    enabled: true
+  health:
+    enabled: true
 ```
 
-All profile property values may be overridden on the command line, or in a .conf file. For example, to start the com.example.candidate.Candidate service with the `aws-production` profile, but override the `mongodb.host` value with a new host address, you might use the following command:
+All profile property values may be overridden on the command line, or in a .conf file. For example, to start the Candidate service with the `aws-production` profile, but override the `mongodb.host` value with a new host address, you might use the following command:
 
 ```bash
-java -jar <name_of_the_jar_file> \
+java -jar <name_of_jar_file> \
   --spring.profiles.active=aws-production \
   --spring.data.mongodb.host=<new_host_address>
   -Djava.security.egd=file:/dev/./urandom

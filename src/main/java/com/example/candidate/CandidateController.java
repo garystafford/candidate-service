@@ -10,9 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 public class CandidateController {
@@ -23,15 +21,18 @@ public class CandidateController {
     @Autowired
     private CandidateRepository candidateRepository;
 
-    @RequestMapping(value = "/candidates", method = RequestMethod.GET)
-    public ResponseEntity<List<Candidate>> getCandidates() {
+    @RequestMapping(value = "/candidates/summary", method = RequestMethod.GET)
+    public ResponseEntity<Map<String, List<String>>> getCandidates() {
 
         Query query = new Query();
         query.addCriteria(Criteria.where("candidate").exists(true));
 
-        List<Candidate> results = mongoTemplate.findAll(Candidate.class);
+        List<Candidate> candidates = mongoTemplate.findAll(Candidate.class);
+        candidates.sort(Comparator.comparing(Candidate::getLastName));
 
-        return ResponseEntity.status(HttpStatus.OK).body(results); // return 200 with payload
+        List<String> results = new ArrayList<>();
+        candidates.forEach(candidate -> results.add(candidate.toString()));
+        return new ResponseEntity<>(Collections.singletonMap("candidates", results), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/simulation", method = RequestMethod.GET)

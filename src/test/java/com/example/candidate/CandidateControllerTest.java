@@ -23,14 +23,16 @@ public class CandidateControllerTest {
 
     @Before
     public void setup() {
-        CandidateController candidateController = new CandidateController();
-        candidateController.seedData();
+        this.restTemplate.getForEntity("/simulation", String.class);
     }
 
     @Test
     public void getCandidatesReturnsListOfCandidates() throws Exception {
-        String expectedCandidates = "";
-        ResponseEntity<String> responseEntity = this.restTemplate.getForEntity("/candidates", String.class);
+        String expectedCandidates = "{\"candidates\":[\"Darrell Castle (Constitution Party)\",\"Hillary Clinton " +
+                "(Democratic Party)\",\"Gary Johnson (Libertarian Party)\",\"Chris Keniston " +
+                "(Veterans Party of America)\",\"Jill Stein (Green Party of the United States)\",\"Donald Trump " +
+                "(Republican Party)\"]}";
+        ResponseEntity<String> responseEntity = this.restTemplate.getForEntity("/candidates/summary", String.class);
         assertThat(responseEntity.getStatusCode().value() == 200);
         assertThat(responseEntity.getBody()).isEqualTo(expectedCandidates);
 
