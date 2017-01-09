@@ -2,7 +2,7 @@
 
 ## Introduction
 
-The Candidate [Spring Boot](https://projects.spring.io/spring-boot/) RESTful Web Service, backed by [MongoDB](https://www.mongodb.com/), is used for DevOps-related training and testing. The Candidate service exposes several HTTP API endpoints, listed below. API users can retrieve a list candidates, add a new candidate, and inspect technical information about the running service. API users can also create a sample list of candidates by calling the `/simulation` endpoint.
+The Candidate [Spring Boot](https://projects.spring.io/spring-boot/) Service is a RESTful Web Service, backed by [MongoDB](https://www.mongodb.com/). The Candidate service exposes several HTTP API endpoints, listed below. API users can retrieve a list candidates, add a new candidate, and inspect technical information about the running service. API users can also create a sample list of candidates by calling the `/simulation` endpoint.
 
 ## Quick Start for Local Development
 
@@ -34,7 +34,7 @@ The [HAL Browser](https://github.com/mikekelly/hal-browser) API browser for the 
 
 ## New Candidate
 
-Adding a new candidate, requires an HTTP `POST` request to the `/candidates` endpoint, as follows:
+Adding a new candidate requires an HTTP `POST` request to the `/candidates` endpoint, as follows:
 
 HTTPie
 
