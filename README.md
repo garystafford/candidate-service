@@ -2,7 +2,7 @@
 
 ## Introduction
 
-The Candidate [Spring Boot](https://projects.spring.io/spring-boot/) RESTful Web Service, backed by [MongoDB](https://www.mongodb.com/), is used for DevOps-related training and testing. The Candidate service exposes several HTTP API endpoints, listed below. API users can review a list candidates, submit a candidate, and inspect technical information about the running service. API users can also create random voting data by calling the `/simulation` endpoint.
+The Candidate [Spring Boot](https://projects.spring.io/spring-boot/) RESTful Web Service, backed by [MongoDB](https://www.mongodb.com/), is used for DevOps-related training and testing. The Candidate service exposes several HTTP API endpoints, listed below. API users can retrieve a list candidates, add a new candidate, and inspect technical information about the running service. API users can also create a sample list of candidates by calling the `/simulation` endpoint.
 
 ## Quick Start for Local Development
 
@@ -21,7 +21,7 @@ By default, the service runs on `localhost`, port `8097`. By default, the servic
 
 Purpose                                                                                                                  | Method  | Endpoint
 ------------------------------------------------------------------------------------------------------------------------ | :------ | :----------------------------------------------------
-Create Random Sample Data                                                                                                | GET     | [/simulation](http://localhost:8097/simulation)
+Create Set of Sample Candidates                                                                                          | GET     | [/simulation](http://localhost:8097/simulation)
 Submit New Candidate                                                                                                     | POST    | [/candidates](http://localhost:8097/candidates)
 Candidate List                                                                                                           | GET     | [/candidates/summary](http://localhost:8097/candidates/summary)
 Service Info                                                                                                             | GET     | [/info](http://localhost:8097/info)
@@ -152,7 +152,7 @@ Using [HTTPie](https://httpie.org/) command line HTTP client.
 
 The project's source code is continuously built and tested on every commit to [GitHub](https://github.com/garystafford/candidate-service), using [Travis CI](https://travis-ci.org/garystafford/candidate-service). If all unit tests pass, the resulting Spring Boot JAR is pushed to the `artifacts` branch of the [candidate-service-artifacts](https://github.com/garystafford/candidate-service-artifacts) GitHub repository. The JAR's filename is incremented with each successful build (i.e. `candidate-service-0.1.10.jar`).
 
-![Vote Continuous Integration Pipeline](Candidate-CI.png)
+![Vote Continuous Integration Pipeline](Voter-CI.png)
 
 ## Spring Profiles
 
