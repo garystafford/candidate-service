@@ -156,74 +156,80 @@ The project's source code is continuously built and tested on every commit to [G
 
 ## Spring Profiles
 
-The Candidate service includes (3) Spring Boot Profiles, in a multi-profile YAML document: `src/main/resources/application.yml`. The profiles are `default`, `aws-production`, and `docker-production`. You will need to ensure your MongoDB instance is available at that `host` address and port of the profile you choose, or you may override the profile's properties.
-
+The Candidate service includes several Spring Boot Profiles, in a multi-profile YAML document: `src/main/resources/application.yml`. The profiles are `default`, `docker-development`, `docker-production`, and `aws-production`. You will need to ensure your MongoDB instance is available at that `host` address and port of the profile you choose, or you may override the profile's properties.
 
 ```yaml
 server:
   port: 8097
-data:
-  mongodb:
-    host: localhost
-    port: 27017
-    database: candidates
+spring:
+  data:
+   mongodb:
+     host: localhost
+     port: 27017
+     database: candidates
 logging:
-  level:
-    root: INFO
+ level:
+   root: INFO
 info:
-  java:
-    source: ${java.version}
-    target: ${java.version}
+ java:
+   source: ${java.version}
+   target: ${java.version}
 management:
-  info:
-    git:
-      mode: full
-    build:
-      enabled: true
+ info:
+   git:
+     mode: full
+   build:
+     enabled: true
 ---
 spring:
-  profiles: aws-production
-data:
-  mongodb:
-    host: 10.0.1.6
-logging:
-  level:
-    root: WARN
-management:
-  info:
-    git:
-      enabled: false
-    build:
-      enabled: false
-endpoints:
-  sensitive: true
-  enabled: false
-  info:
-    enabled: true
-  health:
-    enabled: true
+ profiles: docker-development
+ data:
+   mongodb:
+     host: mongodb
 ---
 spring:
-  profiles: docker-production
-data:
-  mongodb:
-    host: mongodb
+ profiles: aws-production
+ data:
+   mongodb:
+     host: 10.0.1.6
 logging:
-  level:
-    root: WARN
+ level:
+   root: WARN
 management:
-  info:
-    git:
-      enabled: false
-    build:
-      enabled: false
+ info:
+   git:
+     enabled: false
+   build:
+     enabled: false
 endpoints:
-  sensitive: true
-  enabled: false
-  info:
-    enabled: true
-  health:
-    enabled: true
+ sensitive: true
+ enabled: false
+ info:
+   enabled: true
+ health:
+   enabled: true
+---
+spring:
+ profiles: docker-production
+ data:
+   mongodb:
+     host: mongodb
+logging:
+ level:
+   root: WARN
+management:
+ info:
+   git:
+     enabled: false
+   build:
+     enabled: false
+endpoints:
+ sensitive: true
+ enabled: false
+ info:
+   enabled: true
+ health:
+   enabled: true
 ```
 
 All profile property values may be overridden on the command line, or in a .conf file. For example, to start the Candidate service with the `aws-production` profile, but override the `mongodb.host` value with a new host address, you might use the following command:
