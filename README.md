@@ -6,7 +6,7 @@ The Candidate [Spring Boot](https://projects.spring.io/spring-boot/) Service is 
 
 ## Quick Start for Local Development
 
-The Candidate service requires MongoDB to be pre-installed and running locally, on port `27017`. To clone, build, test, and run the Candidate service, locally:
+The Candidate service requires MongoDB to be pre-installed and running locally, on port `27017`. To clone, build, test, and run the Candidate service as a JAR, locally:
 
 ```bash
 git clone https://github.com/garystafford/candidate-service.git
