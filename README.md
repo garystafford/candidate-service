@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/garystafford/candidate-service.svg?branch=master)](https://travis-ci.org/garystafford/candidate-service)
+
 # Candidate Service
 
 ## Introduction
