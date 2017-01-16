@@ -17,4 +17,4 @@ RUN set -ex \
   && cd /candidate \
   && mv candidate-service-*.jar candidate-service.jar
 
-CMD ["java", "-jar", "candidate/candidate-service.jar", "-Djava.security.egd=file:/dev/./urandom", "--spring.profiles.active=docker-production"]
+  CMD ["java", "-Dspring.profiles.active=docker-local", "-Djava.security.egd=file:/dev/./urandom", "-jar", "candidate/candidate-service.jar"]
