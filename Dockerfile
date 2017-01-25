@@ -1,16 +1,16 @@
 FROM java:openjdk-8u111-jdk
 
-MAINTAINER Gary A. Stafford <garystafford@rochester.rr.com>
+LABEL maintainer "Gary A. Stafford <garystafford@rochester.rr.com>"
 
-ENV REFRESHED_AT 2017-01-16
+ENV REFRESHED_AT 2017-01-23
 
 RUN set -ex \
   && apt-get -y update \
   && apt-get -y upgrade \
   && apt-get -y install git \
   && mkdir /candidate \
-  && git clone --depth 1 \
-      "https://github.com/garystafford/cadidate-service-artifacts.git" \
+  && git clone --depth 1 --branch build-artifacts \
+      "https://github.com/garystafford/candidate-service.git" \
       /candidate
 
 RUN set -ex \
