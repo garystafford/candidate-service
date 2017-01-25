@@ -14,8 +14,8 @@ class CandidateDemoList {
 
     private void setCandidates() {
         candidates.add(new Candidate("Donald", "Trump", "Republican Party"));
-        candidates.add(new Candidate("Chris", "Keniston", "Veterans Party of America"));
-        candidates.add(new Candidate("Jill", "Stein", "Green Party of the United States"));
+        candidates.add(new Candidate("Chris", "Keniston", "Veterans Party"));
+        candidates.add(new Candidate("Jill", "Stein", "Green Party"));
         candidates.add(new Candidate("Gary", "Johnson", "Libertarian Party"));
         candidates.add(new Candidate("Darrell", "Castle", "Constitution Party"));
         candidates.add(new Candidate("Hillary", "Clinton", "Democratic Party"));

@@ -4,7 +4,7 @@
 
 ## Introduction
 
-The Candidate [Spring Boot](https://projects.spring.io/spring-boot/) Service is a RESTful Web Service, backed by [MongoDB](https://www.mongodb.com/). The Candidate service exposes several HTTP API endpoints, listed below. API users can retrieve a list candidates, add a new candidate, and inspect technical information about the running service. API users can also create a sample list of candidates by calling the `/simulation` endpoint.
+The Candidate [Spring Boot](https://projects.spring.io/spring-boot/) Service is a RESTful Web Service, backed by [MongoDB](https://www.mongodb.com/). The Candidate service exposes several HTTP API endpoints, listed below. API users can retrieve a list candidates, add a new candidate, and inspect technical information about the running service. API users can also create a sample list of candidates, a static list candidates, based on the 2016 US Presidential Election, by calling the `/simulation` endpoint.
 
 ## Quick Start for Local Development
 
@@ -120,6 +120,21 @@ Using [HTTPie](https://httpie.org/) command line HTTP client.
         "totalElements": 2,
         "totalPages": 1
     }
+}
+```
+
+`http http://localhost:8097/candidates/summary`
+
+```json
+{
+    "candidates": [
+        "Darrell Castle (Constitution Party)",
+        "Hillary Clinton (Democratic Party)",
+        "Gary Johnson (Libertarian Party)",
+        "Chris Keniston (Veterans Party)",
+        "Jill Stein (Green Party)",
+        "Donald Trump (Republican Party)"
+    ]
 }
 ```
 
