@@ -30,7 +30,7 @@ public class CandidateControllerTest {
     public void getCandidatesReturnsListOfCandidates() throws Exception {
         String expectedCandidates = "{\"candidates\":[\"Darrell Castle (Constitution Party)\",\"Hillary Clinton " +
                 "(Democratic Party)\",\"Gary Johnson (Libertarian Party)\",\"Chris Keniston " +
-                "(Veterans Party of America)\",\"Jill Stein (Green Party of the United States)\",\"Donald Trump " +
+                "(Veterans Party)\",\"Jill Stein (Green Party)\",\"Donald Trump " +
                 "(Republican Party)\"]}";
         ResponseEntity<String> responseEntity = this.restTemplate.getForEntity("/candidates/summary", String.class);
         assertThat(responseEntity.getStatusCode().value() == 200);
