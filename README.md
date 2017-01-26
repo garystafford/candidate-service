@@ -14,7 +14,7 @@ The Candidate service requires MongoDB to be pre-installed and running locally, 
 git clone https://github.com/garystafford/candidate-service.git
 cd candidate-service
 ./gradlew clean cleanTest build
-java -jar build/libs/candidate-service-0.1.0.jar
+java -jar build/libs/candidate-service-0.2.0.jar
 ```
 
 ## Service Endpoints
