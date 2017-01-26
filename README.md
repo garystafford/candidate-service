@@ -258,6 +258,14 @@ java -jar <name_of_jar_file> \
   -Djava.security.egd=file:/dev/./urandom
 ```
 
+## Getting Started with API
+
+How to create sample voter data using both services:
+
+1. Create Sample Candidate List: `http localhost:8097/simulation`
+2. Create Sample Voter Data using Candidate List: `http localhost:8099/simulation`
+3. View Sample Voter Data: `http localhost:8099/results`
+
 ## References
 
 - [Spring Data MongoDB - Reference Documentation](http://docs.spring.io/spring-data/mongodb/docs/current/reference/html/)
