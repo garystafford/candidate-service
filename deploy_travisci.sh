@@ -28,5 +28,5 @@ docker build -t garystafford/candidate-service:latest .
 docker push garystafford/candidate-service:latest
 
 IMAGE_TAG="v0.2.${TRAVIS_BUILD_NUMBER}"
-docker tag garystafford/candidate-service:latest candidate-service:${IMAGE_TAG}
-docker push candidate-service::${IMAGE_TAG}
+docker tag garystafford/candidate-service:latest garystafford/candidate-service:${IMAGE_TAG}
+docker push garystafford/candidate-service:${IMAGE_TAG}
