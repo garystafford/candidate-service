@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/garystafford/candidate-service.svg?branch=master)](https://travis-ci.org/garystafford/candidate-service)
+[![Dependencies](https://app.updateimpact.com/badge/817200262778327040/candidate-service.svg?config=compile)](https://app.updateimpact.com/latest/817200262778327040/candidate-service) [![Layers](https://images.microbadger.com/badges/image/garystafford/candidate-service.svg)](https://microbadger.com/images/garystafford/candidate-service "Get your own image badge on microbadger.com") [![Version](https://images.microbadger.com/badges/version/garystafford/candidate-service.svg)](https://microbadger.com/images/garystafford/candidate-service "Get your own version badge on microbadger.com")
 
 # Candidate Service
 
@@ -11,7 +12,7 @@ The Candidate service is designed to work along with the [Voter Service](https:/
 
 ## Quick Start for Local Development
 
-The Candidate service requires MongoDB to be pre-installed and running locally, on port `27017`. To clone, build, test, and run the Candidate service as a JAR, locally:
+The Candidate service requires MongoDB to be running locally, on port `27017`. To clone, build, test, and run the Candidate service as a JAR file, locally:
 
 ```bash
 git clone --depth 1 --branch master \
