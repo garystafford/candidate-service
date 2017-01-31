@@ -11,11 +11,18 @@ The Candidate [Spring Boot](https://projects.spring.io/spring-boot/) Service is 
 The Candidate service requires MongoDB to be pre-installed and running locally, on port `27017`. To clone, build, test, and run the Candidate service as a JAR, locally:
 
 ```bash
-git clone https://github.com/garystafford/candidate-service.git
+git clone --depth 1 --branch master \
+  https://github.com/garystafford/candidate-service.git
 cd candidate-service
 ./gradlew clean cleanTest build
 java -jar build/libs/candidate-service-0.2.0.jar
 ```
+
+## Getting Started with API
+The easiest way to get started with the Candidate and Voter services API, using [HTTPie](https://httpie.org/) from the command line:
+1. Create sample candidates: `http localhost:8097/simulation`
+2. Create sample voter data: `http localhost:8099/simulation`
+3. View sample voter results: `http localhost:8099/results`
 
 ## Service Endpoints
 
@@ -167,7 +174,7 @@ Using [HTTPie](https://httpie.org/) command line HTTP client.
 
 ## Continuous Integration
 
-The project's source code is continuously built and tested on every commit to [GitHub](https://github.com/garystafford/candidate-service), using [Travis CI](https://travis-ci.org/garystafford/candidate-service). If all unit tests pass, the resulting Spring Boot JAR is pushed to the `artifacts` branch of the [candidate-service-artifacts](https://github.com/garystafford/candidate-service-artifacts) GitHub repository. The JAR's filename is incremented with each successful build (i.e. `candidate-service-0.1.10.jar`).
+The project's source code is continuously built and tested on every commit to [GitHub](https://github.com/garystafford/candidate-service), using [Travis CI](https://travis-ci.org/garystafford/candidate-service). If all unit tests pass, the resulting Spring Boot JAR is pushed to the `build-artifacts` branch of the [candidate-service](https://github.com/garystafford/candidate-service/tree/build-artifacts) GitHub repository. The JAR's filename is incremented with each successful build (i.e. `candidate-service-0.2.18.jar`).
 
 ![Vote Continuous Integration Pipeline](Voter-CI.png)
 
@@ -257,14 +264,6 @@ java -jar <name_of_jar_file> \
   --spring.data.mongodb.host=<new_host_address>
   -Djava.security.egd=file:/dev/./urandom
 ```
-
-## Getting Started with API
-
-How to create sample voter data using both services:
-
-1. Create Sample Candidate List: `http localhost:8097/simulation`
-2. Create Sample Voter Data using Candidate List: `http localhost:8099/simulation`
-3. View Sample Voter Data: `http localhost:8099/results`
 
 ## References
 
