@@ -36,7 +36,7 @@ public class CandidateController {
     }
 
     @RequestMapping(value = "/simulation", method = RequestMethod.GET)
-    public ResponseEntity<Map<String, String>> seedData() {
+    public ResponseEntity<Map<String, String>> getSimulation() {
 
         candidateRepository.deleteAll();
         CandidateDemoList candidateDemoList = new CandidateDemoList();

@@ -18,23 +18,17 @@ public class CandidateControllerTest {
     @Autowired
     private TestRestTemplate restTemplate;
 
-    @Autowired
-    private CandidateController candidateController;
-
     @Before
     public void setup() {
-        this.restTemplate.getForEntity("/simulation", String.class);
+        restTemplate.getForEntity("/simulation", String.class);
     }
 
     @Test
     public void getCandidatesReturnsListOfCandidates() throws Exception {
-        String expectedCandidates = "{\"candidates\":[\"Darrell Castle (Constitution Party)\",\"Hillary Clinton " +
-                "(Democratic Party)\",\"Gary Johnson (Libertarian Party)\",\"Chris Keniston " +
-                "(Veterans Party)\",\"Jill Stein (Green Party)\",\"Donald Trump " +
-                "(Republican Party)\"]}";
+        String expectedCandidates = "{\"candidates\":[\"Darrell Castle (Constitution Party)\"";
         ResponseEntity<String> responseEntity = this.restTemplate.getForEntity("/candidates/summary", String.class);
         assertThat(responseEntity.getStatusCode().value() == 200);
-        assertThat(responseEntity.getBody()).isEqualTo(expectedCandidates);
+        assertThat(responseEntity.getBody()).contains(expectedCandidates);
 
     }
 
@@ -43,7 +37,7 @@ public class CandidateControllerTest {
         Candidate candidate = new Candidate("John", "Doe", "Test Party");
 
         ResponseEntity<Candidate> responseEntity =
-                this.restTemplate.postForEntity("/candidates", candidate, Candidate.class);
+                restTemplate.postForEntity("/candidates", candidate, Candidate.class);
         assertThat(responseEntity.getStatusCode().value() == 201);
         assertThat(responseEntity.getBody().toString()).isEqualTo("John Doe (Test Party)");
     }
@@ -53,7 +47,7 @@ public class CandidateControllerTest {
         String expectedResponse =
                 "{\"message\":\"random simulation data created\"}";
         ResponseEntity<String> responseEntity =
-                this.restTemplate.getForEntity("/simulation", String.class);
+                restTemplate.getForEntity("/simulation", String.class);
         assertThat(responseEntity.getStatusCode().value() == 200);
         assertThat(responseEntity.getBody()).isEqualTo(expectedResponse);
     }
