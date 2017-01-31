@@ -4,7 +4,7 @@
 
 ## Introduction
 
-The Candidate [Spring Boot](https://projects.spring.io/spring-boot/) Service is a RESTful Web Service, backed by [MongoDB](https://www.mongodb.com/). The Candidate service exposes several HTTP API endpoints, listed below. API users can retrieve a list candidates, add a new candidate, and inspect technical information about the running service. API users can also create a sample list of candidates, a static list candidates, based on the 2016 US Presidential Election, by calling the `/simulation` endpoint.
+The Candidate [Spring Boot](https://projects.spring.io/spring-boot/) Service is a RESTful Web Service, backed by [MongoDB](https://www.mongodb.com/). The Candidate service exposes several HTTP API endpoints, listed below. API users can retrieve a list candidates, add a new candidate, and inspect technical information about the running service. API users can also create a sample list of candidates, based on the 2016 US Presidential Election, by calling the `/simulation` endpoint.
 
 ## Quick Start for Local Development
 
@@ -70,6 +70,29 @@ wget --method POST \
 
 Using [HTTPie](https://httpie.org/) command line HTTP client.
 
+`http http://localhost:8097/simulation`
+
+```json
+{
+    "message": "simulation data created"
+}
+```
+
+`http http://localhost:8097/candidates/summary`
+
+```json
+{
+    "candidates": [
+        "Darrell Castle (Constitution Party)",
+        "Hillary Clinton (Democratic Party)",
+        "Gary Johnson (Libertarian Party)",
+        "Chris Keniston (Veterans Party)",
+        "Jill Stein (Green Party)",
+        "Donald Trump (Republican Party)"
+    ]
+}
+```
+
 `http http://localhost:8097/candidates`
 
 ```json
@@ -123,21 +146,6 @@ Using [HTTPie](https://httpie.org/) command line HTTP client.
 }
 ```
 
-`http http://localhost:8097/candidates/summary`
-
-```json
-{
-    "candidates": [
-        "Darrell Castle (Constitution Party)",
-        "Hillary Clinton (Democratic Party)",
-        "Gary Johnson (Libertarian Party)",
-        "Chris Keniston (Veterans Party)",
-        "Jill Stein (Green Party)",
-        "Donald Trump (Republican Party)"
-    ]
-}
-```
-
 `http POST http://localhost:8097/candidates firstName='John' lastName='Doe' politicalParty='Test Party'`
 
 ```json
@@ -154,14 +162,6 @@ Using [HTTPie](https://httpie.org/) command line HTTP client.
     "fullName": "John Doe",
     "lastName": "Doe",
     "politicalParty": "Test Party"
-}
-```
-
-`http http://localhost:8097/simulation`
-
-```json
-{
-    "message": "random simulation data created"
 }
 ```
 

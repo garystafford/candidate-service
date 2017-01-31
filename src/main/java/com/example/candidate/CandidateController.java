@@ -42,7 +42,7 @@ public class CandidateController {
         CandidateDemoList candidateDemoList = new CandidateDemoList();
         candidateRepository.save(candidateDemoList.getCandidates());
         Map<String, String> result = new HashMap<>();
-        result.put("message", "random simulation data created");
+        result.put("message", "simulation data created");
 
         return ResponseEntity.status(HttpStatus.OK).body(result); // return 200 with payload
     }

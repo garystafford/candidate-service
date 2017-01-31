@@ -45,7 +45,7 @@ public class CandidateControllerTest {
     @Test
     public void getSimulationReturnsExpectedMessage() throws Exception {
         String expectedResponse =
-                "{\"message\":\"random simulation data created\"}";
+                "{\"message\":\"simulation data created\"}";
         ResponseEntity<String> responseEntity =
                 restTemplate.getForEntity("/simulation", String.class);
         assertThat(responseEntity.getStatusCode().value() == 200);
