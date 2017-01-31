@@ -6,7 +6,7 @@
 
 The Candidate [Spring Boot](https://projects.spring.io/spring-boot/) Service is a RESTful Web Service, backed by [MongoDB](https://www.mongodb.com/). The Candidate service exposes several HTTP API endpoints, listed below. API users can retrieve a list candidates, add a new candidate, and inspect technical information about the running service. API users can also create a sample list of candidates, based on the 2016 US Presidential Election, by calling the `/simulation` endpoint.
 
-The Candidate service is designed to work along with the [Voter service](https://github.com/garystafford/voter-service/), as part of a complete API. The Voter service is dependent on the Candidate service to supply a list of candidates. The Candidate service is called by the Voter service, using [HTTP-based synchronous IPC](https://www.nginx.com/blog/building-microservices-inter-process-communication/), when either the Voter service's `/candidates` or `/simulation` endpoints are called.
+The Candidate service is designed to work along with the [Voter Service](https://github.com/garystafford/voter-service/), as part of a complete API. The Voter service is dependent on the Candidate service to supply a list of candidates. The Candidate service is called by the Voter service, using [HTTP-based synchronous IPC](https://www.nginx.com/blog/building-microservices-inter-process-communication/), when either the Voter service's `/candidates` or `/simulation` endpoints are called.
 
 
 ## Quick Start for Local Development
