@@ -1,6 +1,8 @@
 package com.example.candidate;
 
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -14,6 +16,9 @@ import java.util.*;
 
 @RestController
 public class CandidateController {
+
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
 
     @Autowired
     private MongoTemplate mongoTemplate;
@@ -32,7 +37,13 @@ public class CandidateController {
 
         List<String> results = new ArrayList<>();
         candidates.forEach(candidate -> results.add(candidate.toString()));
+        SendMessage(results);
         return new ResponseEntity<>(Collections.singletonMap("candidates", results), HttpStatus.OK);
+    }
+
+    private void SendMessage(List<String> results) {
+        System.out.println("Sending candidates...");
+        rabbitTemplate.convertAndSend(Application.queueName, results);
     }
 
     @RequestMapping(value = "/simulation", method = RequestMethod.GET)
