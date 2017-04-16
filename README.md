@@ -200,16 +200,18 @@ logging:
 info:
  java:
    source: ${java.version}
-   target: ${java.version}
 management:
  info:
    git:
      mode: full
    build:
      enabled: true
+endpoints:
+ sensitive: false
+ enabled: true
 ---
 spring:
- profiles: docker-development
+ profiles: docker-local
  data:
    mongodb:
      host: mongodb
