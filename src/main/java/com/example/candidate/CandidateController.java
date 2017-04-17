@@ -16,13 +16,17 @@ import java.util.*;
 @RestController
 public class CandidateController {
 
-    @Autowired
     private MongoTemplate mongoTemplate;
 
-    @Autowired
     private CandidateRepository candidateRepository;
 
     private List<String> results = new ArrayList<>();
+
+    @Autowired
+    public CandidateController(MongoTemplate mongoTemplate, CandidateRepository candidateRepository) {
+        this.mongoTemplate = mongoTemplate;
+        this.candidateRepository = candidateRepository;
+    }
 
     @RequestMapping(value = "/candidates/summary", method = RequestMethod.GET)
     public ResponseEntity<Map<String, List<String>>> getCandidates() {
