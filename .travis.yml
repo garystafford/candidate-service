@@ -13,7 +13,7 @@ before_script:
 - sleep 15
 script:
 - "./gradlew clean cleanTest build --console=rich"
-- "./gradlew updateImpactSubmit"
+# - "./gradlew updateImpactSubmit"
 - sh ./deploy_travisci.sh
 env:
   global:
