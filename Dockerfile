@@ -13,4 +13,4 @@ RUN mkdir /candidate \
   && cd /candidate \
   && mv candidate-service-*.jar candidate-service.jar
 ENV JAVA_OPTS=""
-CMD [ "java", "-Dspring.profiles.active=docker-development", "-Djava.security.egd=file:/dev/./urandom", "-jar", "candidate/candidate-service.jar"]
+CMD [ "java", "-Djava.security.egd=file:/dev/./urandom", "-jar", "candidate/candidate-service.jar" ]
