@@ -15,8 +15,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class CandidateControllerTest {
 
-    @Autowired
     private TestRestTemplate restTemplate;
+
+    @Autowired
+    public CandidateControllerTest(TestRestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
 
     @Before
     public void setup() {
