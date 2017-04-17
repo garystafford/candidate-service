@@ -43,7 +43,7 @@ public class CandidateController {
 
     private void SendMessage(List<String> results) {
         System.out.println("Sending candidates...");
-        rabbitTemplate.convertAndSend(Application.queueName, results);
+        rabbitTemplate.convertAndSend(Application.responseQueueName, results);
     }
 
     @RequestMapping(value = "/simulation", method = RequestMethod.GET)
