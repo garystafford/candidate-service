@@ -2,51 +2,28 @@ package com.example.candidate;
 
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
+import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.Queue;
-import org.springframework.amqp.core.TopicExchange;
-import org.springframework.amqp.rabbit.connection.ConnectionFactory;
-import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
-import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-import java.util.UUID;
-
 @SpringBootApplication
 public class Application {
 
-    final static String requestQueueName = "rpc_queue";
-    final static String responseQueueName = "rpc_response";
-
     @Bean
-    Queue rcpQueue() {
-        return new Queue(responseQueueName, false);
+    public Queue queue() {
+        return new Queue("voter.rpc.requests");
     }
 
     @Bean
-    TopicExchange exchange() {
-        return new TopicExchange("candidates-exchange");
+    public DirectExchange exchange() {
+        return new DirectExchange("voter.rpc");
     }
 
     @Bean
-    Binding binding(Queue queue, TopicExchange exchange) {
-        return BindingBuilder.bind(queue).to(exchange).with(responseQueueName);
-    }
-
-    @Bean
-    SimpleMessageListenerContainer container(ConnectionFactory connectionFactory,
-                                             MessageListenerAdapter listenerAdapter) {
-        SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
-        container.setConnectionFactory(connectionFactory);
-        container.setQueueNames(requestQueueName);
-        container.setMessageListener(listenerAdapter);
-        return container;
-    }
-
-    @Bean
-    MessageListenerAdapter listenerAdapter(Receiver receiver) {
-        return new MessageListenerAdapter(receiver, "receiveMessage");
+    public Binding binding(DirectExchange exchange, Queue queue) {
+        return BindingBuilder.bind(queue).to(exchange).with("rpc");
     }
 
     public static void main(String[] args) {

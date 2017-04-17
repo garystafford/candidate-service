@@ -1,8 +1,7 @@
 package com.example.candidate;
 
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -18,13 +17,12 @@ import java.util.*;
 public class CandidateController {
 
     @Autowired
-    private RabbitTemplate rabbitTemplate;
-
-    @Autowired
     private MongoTemplate mongoTemplate;
 
     @Autowired
     private CandidateRepository candidateRepository;
+
+    private List<String> results = new ArrayList<>();
 
     @RequestMapping(value = "/candidates/summary", method = RequestMethod.GET)
     public ResponseEntity<Map<String, List<String>>> getCandidates() {
@@ -34,16 +32,16 @@ public class CandidateController {
 
         List<Candidate> candidates = mongoTemplate.findAll(Candidate.class);
         candidates.sort(Comparator.comparing(Candidate::getLastName));
-
-        List<String> results = new ArrayList<>();
+        results = new ArrayList<>();
         candidates.forEach(candidate -> results.add(candidate.toString()));
-        SendMessage(results);
         return new ResponseEntity<>(Collections.singletonMap("candidates", results), HttpStatus.OK);
     }
 
-    private void SendMessage(List<String> results) {
+    @RabbitListener(queues = "voter.rpc.requests")
+    private List<String> SendMessage(String request) {
         System.out.println("Sending candidates...");
-        rabbitTemplate.convertAndSend(Application.responseQueueName, results);
+        System.out.println(request);
+        return results;
     }
 
     @RequestMapping(value = "/simulation", method = RequestMethod.GET)

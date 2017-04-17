@@ -2,6 +2,7 @@
 
 ## References
 https://spring.io/guides/gs/messaging-rabbitmq/
+https://github.com/spring-projects/spring-amqp-samples/tree/master/rabbitmq-tutorials/src/main/java/org/springframework/amqp/tutorials/tut6
 https://developers.redhat.com/blog/2016/05/26/scalable-microservices-through-messaging/
 https://content.pivotal.io/blog/messaging-patterns-for-event-driven-microservices
 https://www.rabbitmq.com/getstarted.html
