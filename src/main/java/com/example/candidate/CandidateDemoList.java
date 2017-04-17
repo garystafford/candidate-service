@@ -1,6 +1,7 @@
 package com.example.candidate;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 class CandidateDemoList {
@@ -22,7 +23,7 @@ class CandidateDemoList {
     }
 
     public List<Candidate> getCandidates() {
-//        candidates.sort((Candidate o1, Candidate o2) -> o1.getLastName().compareTo(o2.getLastName()));
+        candidates.sort(Comparator.comparing(Candidate::getLastName));
         return candidates;
     }
 }

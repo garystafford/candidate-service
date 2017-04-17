@@ -38,9 +38,9 @@ public class CandidateController {
     }
 
     @RabbitListener(queues = "voter.rpc.requests")
-    private List<String> SendMessage(String request) {
-        System.out.println("Sending candidates...");
-        System.out.println(request);
+    private List<String> getCandidatesMessageRpc(String requestMessage) {
+        System.out.printf("Request message: %s%n", requestMessage);
+        System.out.println("Sending RPC response message with list of candidates...");
         return results;
     }
 
@@ -51,7 +51,7 @@ public class CandidateController {
         CandidateDemoList candidateDemoList = new CandidateDemoList();
         candidateRepository.save(candidateDemoList.getCandidates());
         Map<String, String> result = new HashMap<>();
-        result.put("message", "simulation data created");
+        result.put("message", "Simulation data created!");
 
         return ResponseEntity.status(HttpStatus.OK).body(result); // return 200 with payload
     }
