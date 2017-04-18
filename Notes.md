@@ -12,4 +12,10 @@ https://gist.github.com/garyrussell/8900257http://localhost:15672/
 
 
 ```bash
+http localhost:8097/simulation
+http localhost:8097/candidates/summary
+
+http localhost:8099/simulation/rpc
+http localhost:8099/candidates/rpc
+
 ```
