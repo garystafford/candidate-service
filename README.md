@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/garystafford/candidate-service.svg?branch=master)](https://travis-ci.org/garystafford/candidate-service) [![Dependencies](https://app.updateimpact.com/badge/817200262778327040/candidate-service.svg?config=compile)](https://app.updateimpact.com/latest/817200262778327040/candidate-service) [![Layers](https://images.microbadger.com/badges/image/garystafford/candidate-service.svg)](https://microbadger.com/images/garystafford/candidate-service "Get your own image badge on microbadger.com") [![Version](https://images.microbadger.com/badges/version/garystafford/candidate-service.svg)](https://microbadger.com/images/garystafford/candidate-service "Get your own version badge on microbadger.com")
+[![Build Status](https://travis-ci.org/garystafford/candidate-service.svg?branch=rabbitmq)](https://travis-ci.org/garystafford/candidate-service) [![Dependencies](https://app.updateimpact.com/badge/817200262778327040/candidate-service.svg?config=compile)](https://app.updateimpact.com/latest/817200262778327040/candidate-service) [![Layers](https://images.microbadger.com/badges/image/garystafford/candidate-service.svg)](https://microbadger.com/images/garystafford/candidate-service "Get your own image badge on microbadger.com") [![Version](https://images.microbadger.com/badges/version/garystafford/candidate-service.svg)](https://microbadger.com/images/garystafford/candidate-service "Get your own version badge on microbadger.com")
 
 # Candidate Service
 
@@ -14,7 +14,7 @@ The Candidate service is designed to work along with the [Voter Service](https:/
 The Candidate service requires MongoDB to be running locally, on port `27017`. To clone, build, test, and run the Candidate service as a JAR file, locally:
 
 ```bash
-git clone --depth 1 --branch master \
+git clone --depth 1 --branch rabbitmq \
   https://github.com/garystafford/candidate-service.git
 cd candidate-service
 ./gradlew clean cleanTest build
@@ -186,79 +186,88 @@ The project's source code is continuously built and tested on every commit to [G
 The Candidate service includes several Spring Boot Profiles, in a multi-profile YAML document: `src/main/resources/application.yml`. The profiles are `default`, `docker-development`, `docker-production`, and `aws-production`. You will need to ensure your MongoDB instance is available at that `host` address and port of the profile you choose, or you may override the profile's properties.
 
 ```yaml
+endpoints:
+  enabled: true
+  sensitive: false
+info:
+  java:
+    source: "${java.version}"
+logging:
+  level:
+    root: INFO
+management:
+  info:
+    build:
+      enabled: true
+    git:
+      mode: full
 server:
   port: 8097
 spring:
   data:
-   mongodb:
-     host: localhost
-     port: 27017
-     database: candidates
-logging:
- level:
-   root: INFO
-info:
- java:
-   source: ${java.version}
-management:
- info:
-   git:
-     mode: full
-   build:
-     enabled: true
-endpoints:
- sensitive: false
- enabled: true
+    mongodb:
+      database: candidates
+      host: localhost
+      port: 27017
+  rabbitmq:
+    host: localhost
 ---
 spring:
- profiles: docker-local
- data:
-   mongodb:
-     host: mongodb
+  data:
+    mongodb:
+      host: mongodb
+  rabbitmq:
+    host: rabbitmq
+  profiles: docker-local
 ---
-spring:
- profiles: aws-production
- data:
-   mongodb:
-     host: 10.0.1.6
-logging:
- level:
-   root: WARN
-management:
- info:
-   git:
-     enabled: false
-   build:
-     enabled: false
-endpoints:
- sensitive: true
- enabled: false
- info:
-   enabled: true
- health:
-   enabled: true
 ---
-spring:
- profiles: docker-production
- data:
-   mongodb:
-     host: mongodb
-logging:
- level:
-   root: WARN
-management:
- info:
-   git:
-     enabled: false
-   build:
-     enabled: false
 endpoints:
- sensitive: true
- enabled: false
- info:
-   enabled: true
- health:
-   enabled: true
+  enabled: false
+  health:
+    enabled: true
+  info:
+    enabled: true
+  sensitive: true
+logging:
+  level:
+    root: WARN
+management:
+  info:
+    build:
+      enabled: false
+    git:
+      enabled: false
+spring:
+  data:
+    mongodb:
+      host: "10.0.1.6"
+  rabbitmq:
+    host: "10.0.1.8"
+  profiles: aws-production
+---
+endpoints:
+  enabled: false
+  health:
+    enabled: true
+  info:
+    enabled: true
+  sensitive: true
+logging:
+  level:
+    root: WARN
+management:
+  info:
+    build:
+      enabled: false
+    git:
+      enabled: false
+spring:
+  data:
+    mongodb:
+      host: mongodb
+  rabbitmq:
+    host: rabbitmq
+  profiles: docker-production
 ```
 
 All profile property values may be overridden on the command line, or in a .conf file. For example, to start the Candidate service with the `aws-production` profile, but override the `mongodb.host` value with a new host address, you might use the following command:
