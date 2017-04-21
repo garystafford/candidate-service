@@ -27,6 +27,11 @@ public class CandidateController {
         this.candidateRepository = candidateRepository;
     }
 
+    /**
+     * Returns a summarily list of candidates
+     * @param election
+     * @return
+     */
     @RequestMapping(value = "/candidates/summary", method = RequestMethod.GET)
     public ResponseEntity<Map<String, List<String>>> getCandidates(@Param("election") String election) {
 
@@ -43,6 +48,8 @@ public class CandidateController {
     /**
      * Consumes query message from queue containing election
      * Produces candidate list based on election query
+     * @param requestMessage
+     * @return
      */
     @RabbitListener(queues = "voter.rpc.requests")
     private List<String> getCandidatesMessageRpc(String requestMessage) {
@@ -62,6 +69,7 @@ public class CandidateController {
 
     /**
      * Populates database with list of candidates
+     * @return
      */
     @RequestMapping(value = "/simulation", method = RequestMethod.GET)
     public ResponseEntity<Map<String, String>> getSimulation() {
