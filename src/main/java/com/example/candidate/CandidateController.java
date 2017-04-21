@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,15 +28,22 @@ public class CandidateController {
     }
 
     @RequestMapping(value = "/candidates/summary", method = RequestMethod.GET)
-    public ResponseEntity<Map<String, List<String>>> getCandidates() {
+    public ResponseEntity<Map<String, List<String>>> getCandidates(@Param("election") String election) {
 
-        List<Candidate> candidates = mongoTemplate.findAll(Candidate.class);
+        Query query = new Query();
+        query.addCriteria(Criteria.where("election").is(election));
+
+        List<Candidate> candidates = mongoTemplate.find(query, Candidate.class);
         candidates.sort(Comparator.comparing(Candidate::getLastName));
         List<String> results = new ArrayList<>();
         candidates.forEach(candidate -> results.add(candidate.toString()));
         return new ResponseEntity<>(Collections.singletonMap("candidates", results), HttpStatus.OK);
     }
 
+    /**
+     * Consumes query message from queue containing election
+     * Produces candidate list based on election query
+     */
     @RabbitListener(queues = "voter.rpc.requests")
     private List<String> getCandidatesMessageRpc(String requestMessage) {
 
@@ -52,6 +60,9 @@ public class CandidateController {
         return results;
     }
 
+    /**
+     * Populates database with list of candidates
+     */
     @RequestMapping(value = "/simulation", method = RequestMethod.GET)
     public ResponseEntity<Map<String, String>> getSimulation() {
 

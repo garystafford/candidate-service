@@ -25,8 +25,10 @@ public class CandidateControllerTest {
 
     @Test
     public void getCandidatesReturnsListOfCandidates() throws Exception {
+        String election = "2016 Presidential Election";
         String expectedCandidates = "{\"candidates\":[\"Darrell Castle (Constitution Party)\"";
-        ResponseEntity<String> responseEntity = this.restTemplate.getForEntity("/candidates/summary", String.class);
+        ResponseEntity<String> responseEntity = this.restTemplate.getForEntity(
+                String.format("/candidates/summary?election=%s", election), String.class);
         assertThat(responseEntity.getStatusCode().value() == 200);
         assertThat(responseEntity.getBody()).contains(expectedCandidates);
 
@@ -34,7 +36,12 @@ public class CandidateControllerTest {
 
     @Test
     public void postCandidateReturnsNewCandidate() throws Exception {
-        Candidate candidate = new Candidate("John", "Doe", "Test Party");
+        Candidate candidate = new Candidate(
+                "John",
+                "Doe",
+                "Test Party",
+                "2017 Test Election"
+        );
 
         ResponseEntity<Candidate> responseEntity =
                 restTemplate.postForEntity("/candidates", candidate, Candidate.class);

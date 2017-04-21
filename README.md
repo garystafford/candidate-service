@@ -6,7 +6,9 @@
 
 The Candidate [Spring Boot](https://projects.spring.io/spring-boot/) Service is a RESTful Web Service, backed by [MongoDB](https://www.mongodb.com/). The Candidate service exposes several HTTP API endpoints, listed below. API users can retrieve a list candidates, add a new candidate, and inspect technical information about the running service. API users can also create a sample list of candidates, based on the 2016 US Presidential Election, by calling the `/simulation` endpoint.
 
-The Candidate service is designed to work along with the [Voter Service](https://github.com/garystafford/voter-service/), as part of a complete API. The Voter service is dependent on the Candidate service to supply a list of candidates. The Candidate service is called by the Voter service, using [HTTP-based synchronous IPC](https://www.nginx.com/blog/building-microservices-inter-process-communication/), when either the Voter service's `/candidates` or `/simulation` endpoints are called.
+The Voter service is designed to work along with the [Candidate Service](https://github.com/garystafford/candidate-service), as part of a complete API. The Voter service is dependent on the Candidate service to supply a list of candidates. The Candidate service is called by the Voter service, using one of two methods:
+1. [HTTP-based Synchronous IPC](https://www.nginx.com/blog/building-microservices-inter-process-communication/), when either the Voter service's `/candidates?election={election}` or `/simulation?election={election}` endpoints are called.
+2. [Messaging-based Remote Procedure Call (RPC) IPC](http://www.rabbitmq.com/tutorials/tutorial-six-java.html), when either the Voter service's `/candidates/rpc?election={election}` or `/simulation/rpc?election={election}` endpoints are called.
 
 
 ## Quick Start for Local Development
@@ -24,7 +26,7 @@ java -jar build/libs/candidate-service-0.3.0.jar
 ## Getting Started with the API
 The easiest way to get started with the Candidate and Voter services API, using [HTTPie](https://httpie.org/) from the command line:  
 1. Create sample candidates: `http http://localhost:8097/simulation`  
-2. Create sample voter data: `http http://localhost:8099/simulation`  
+2. Create sample voter data: `http http://localhost:8099/simulation?election="2016 Presidential Election"`  
 3. View sample voter results: `http http://localhost:8099/results`
 
 ## Service Endpoints
@@ -35,7 +37,7 @@ Purpose                                                                         
 ------------------------------------------------------------------------------------------------------------------------ | :------ | :----------------------------------------------------
 Create Set of Sample Candidates                                                                                          | GET     | [/simulation](http://localhost:8097/simulation)
 Submit New Candidate                                                                                                     | POST    | [/candidates](http://localhost:8097/candidates)
-Candidate List                                                                                                           | GET     | [/candidates/summary](http://localhost:8097/candidates/summary)
+Candidate List                                                                                                           | GET     | [/candidates/summary?election={election}](http://localhost:8097/candidates/summary?election=)
 Service Info                                                                                                             | GET     | [/info](http://localhost:8097/info)
 Service Health                                                                                                           | GET     | [/health](http://localhost:8097/health)
 Service Metrics                                                                                                          | GET     | [/metrics](http://localhost:8097/metrics)
@@ -54,7 +56,8 @@ HTTPie
 http POST http://localhost:8097/candidates /
   firstName='Mary' /
   lastName='Smith' /
-  politicalParty='Test Party'
+  politicalParty='Test Party' /
+  election='2016 Presidential Election'
 ```
 
 cURL
@@ -62,7 +65,7 @@ cURL
 ```text
 curl -X POST \
   -H "Content-Type: application/json" \
-  -d '{ "firstName": "Mary", "lastName": "Smith", "politicalParty": "Test Party" }' \
+  -d '{ "firstName": "Mary", "lastName": "Smith", "politicalParty": "Test Party", "election": "2016 Presidential Election" }' \
   "http://localhost:8097/candidates"
 ```
 
@@ -71,7 +74,7 @@ wget
 ```text
 wget --method POST \
   --header 'content-type: application/json' \
-  --body-data '{ "firstName": "Mary", "lastName": "Smith", "politicalParty": "Test Party" }' \
+  --body-data '{ "firstName": "Mary", "lastName": "Smith", "politicalParty": "Test Party", "election": "2016 Presidential Election" }' \
   --no-verbose \
   --output-document - http://localhost:8097/candidates
 ```
@@ -84,7 +87,7 @@ Using [HTTPie](https://httpie.org/) command line HTTP client.
 
 ```json
 {
-    "message": "simulation data created"
+    "message": "Simulation data created!"
 }
 ```
 
@@ -121,7 +124,8 @@ Using [HTTPie](https://httpie.org/) command line HTTP client.
                 "firstName": "Donald",
                 "fullName": "Donald Trump",
                 "lastName": "Trump",
-                "politicalParty": "Republican Party"
+                "politicalParty": "Republican Party",
+                "election": "2016 Presidential Election"
             },
             {
                 "_links": {
@@ -135,7 +139,8 @@ Using [HTTPie](https://httpie.org/) command line HTTP client.
                 "firstName": "Hillary",
                 "fullName": "Hillary Clinton",
                 "lastName": "Clinton",
-                "politicalParty": "Democratic Party"
+                "politicalParty": "Democratic Party",
+                "election": "2016 Presidential Election"
             }
         ]
     },
@@ -156,7 +161,7 @@ Using [HTTPie](https://httpie.org/) command line HTTP client.
 }
 ```
 
-`http POST http://localhost:8097/candidates firstName='John' lastName='Doe' politicalParty='Test Party'`
+`http POST http://localhost:8097/candidates firstName='John' lastName='Doe' politicalParty='Test Party' election='2016 Presidential Election'`
 
 ```json
 {
@@ -171,7 +176,8 @@ Using [HTTPie](https://httpie.org/) command line HTTP client.
     "firstName": "John",
     "fullName": "John Doe",
     "lastName": "Doe",
-    "politicalParty": "Test Party"
+    "politicalParty": "Test Party",
+    "election": "2016 Presidential Election"
 }
 ```
 
