@@ -20,8 +20,6 @@ public class CandidateController {
 
     private CandidateRepository candidateRepository;
 
-    private List<String> results = new ArrayList<>();
-
     @Autowired
     public CandidateController(MongoTemplate mongoTemplate, CandidateRepository candidateRepository) {
         this.mongoTemplate = mongoTemplate;
@@ -31,20 +29,26 @@ public class CandidateController {
     @RequestMapping(value = "/candidates/summary", method = RequestMethod.GET)
     public ResponseEntity<Map<String, List<String>>> getCandidates() {
 
-        Query query = new Query();
-        query.addCriteria(Criteria.where("candidate").exists(true));
-
         List<Candidate> candidates = mongoTemplate.findAll(Candidate.class);
         candidates.sort(Comparator.comparing(Candidate::getLastName));
-        results = new ArrayList<>();
+        List<String> results = new ArrayList<>();
         candidates.forEach(candidate -> results.add(candidate.toString()));
         return new ResponseEntity<>(Collections.singletonMap("candidates", results), HttpStatus.OK);
     }
 
     @RabbitListener(queues = "voter.rpc.requests")
     private List<String> getCandidatesMessageRpc(String requestMessage) {
+
         System.out.printf("Request message: %s%n", requestMessage);
         System.out.println("Sending RPC response message with list of candidates...");
+
+        Query query = new Query();
+        query.addCriteria(Criteria.where("election").is(requestMessage));
+
+        List<Candidate> candidates = mongoTemplate.find(query, Candidate.class);
+        candidates.sort(Comparator.comparing(Candidate::getLastName));
+        List<String> results = new ArrayList<>();
+        candidates.forEach(candidate -> results.add(candidate.toString()));
         return results;
     }
 

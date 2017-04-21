@@ -14,15 +14,17 @@ class Candidate {
     private String firstName;
     private String lastName;
     private String politicalParty;
+    private String election;
 
     Candidate() {
         // unused constructor
     }
 
-    public Candidate(String firstName, String lastName, String politicalParty) {
+    public Candidate(String firstName, String lastName, String politicalParty, String election) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.politicalParty = politicalParty;
+        this.election = election;
     }
 
     public String getId() {
@@ -43,6 +45,10 @@ class Candidate {
 
     public String getPoliticalParty() {
         return politicalParty;
+    }
+
+    public String getElection() {
+        return election;
     }
 
     @Override
