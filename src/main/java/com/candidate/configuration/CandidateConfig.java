@@ -1,4 +1,4 @@
-package com.example.candidate;
+package com.candidate.configuration;
 
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;

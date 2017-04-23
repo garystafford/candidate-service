@@ -1,4 +1,4 @@
-package com.example.candidate;
+package com.candidate.utilities;
 
 import com.mongodb.CommandResult;
 import org.springframework.beans.factory.annotation.Autowired;

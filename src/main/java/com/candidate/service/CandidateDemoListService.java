@@ -1,14 +1,18 @@
-package com.example.candidate;
+package com.candidate.service;
+
+import com.candidate.domain.Candidate;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-class CandidateDemoList {
+@Service
+public class CandidateDemoListService {
 
     private List<Candidate> candidates;
 
-    public CandidateDemoList() {
+    public CandidateDemoListService() {
         candidates = new ArrayList<>();
         setCandidates();
     }

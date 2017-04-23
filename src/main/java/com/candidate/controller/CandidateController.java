@@ -1,5 +1,8 @@
-package com.example.candidate;
+package com.candidate.controller;
 
+import com.candidate.service.CandidateDemoListService;
+import com.candidate.domain.Candidate;
+import com.candidate.repository.CandidateRepository;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -21,10 +24,15 @@ public class CandidateController {
 
     private CandidateRepository candidateRepository;
 
+    private CandidateDemoListService candidateDemoListService;
+
     @Autowired
-    public CandidateController(MongoTemplate mongoTemplate, CandidateRepository candidateRepository) {
+    public CandidateController(MongoTemplate mongoTemplate,
+                               CandidateRepository candidateRepository,
+                               CandidateDemoListService candidateDemoListService) {
         this.mongoTemplate = mongoTemplate;
         this.candidateRepository = candidateRepository;
+        this.candidateDemoListService = candidateDemoListService;
     }
 
     /**
@@ -75,8 +83,7 @@ public class CandidateController {
     public ResponseEntity<Map<String, String>> getSimulation() {
 
         candidateRepository.deleteAll();
-        CandidateDemoList candidateDemoList = new CandidateDemoList();
-        candidateRepository.save(candidateDemoList.getCandidates());
+        candidateRepository.save(candidateDemoListService.getCandidates());
         Map<String, String> result = new HashMap<>();
         result.put("message", "Simulation data created!");
 

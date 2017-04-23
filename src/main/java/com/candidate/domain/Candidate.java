@@ -1,4 +1,4 @@
-package com.example.candidate;
+package com.candidate.domain;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import org.springframework.data.annotation.Id;
@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
-class Candidate {
+public class Candidate {
 
     @Id
     private String id;

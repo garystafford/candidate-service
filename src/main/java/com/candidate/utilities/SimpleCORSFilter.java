@@ -1,4 +1,4 @@
-package com.example.candidate;
+package com.candidate.utilities;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +17,7 @@ public class SimpleCORSFilter implements Filter {
     private final Logger log = LoggerFactory.getLogger(SimpleCORSFilter.class);
 
     public SimpleCORSFilter() {
-        log.info("com.example.candidate.SimpleCORSFilter init");
+        log.info("SimpleCORSFilter init");
     }
 
     @Override
