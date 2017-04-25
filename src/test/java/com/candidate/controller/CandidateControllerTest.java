@@ -26,7 +26,7 @@ public class CandidateControllerTest {
 
     @Test
     public void getCandidatesReturnsListOfCandidates() throws Exception {
-       String election = "2016%20Presidential%20Election";
+       String election = "2016 Presidential Election";
         String expectedCandidates = "{\"candidates\":[\"Darrell Castle (Constitution Party)\"";
         ResponseEntity<String> responseEntity = this.restTemplate.getForEntity(
                 String.format("/candidates/summary?election=%s", election), String.class);
