@@ -21,15 +21,15 @@ public class CandidateControllerTest {
 
     @Before
     public void setup() {
-        restTemplate.getForEntity("/simulation", String.class);
+        restTemplate.getForEntity("/candidate/simulation", String.class);
     }
 
     @Test
     public void getCandidatesReturnsListOfCandidates() throws Exception {
-        String election = "2016 Presidential Election";
+       String election = "2016%20Presidential%20Election";
         String expectedCandidates = "{\"candidates\":[\"Darrell Castle (Constitution Party)\"";
         ResponseEntity<String> responseEntity = this.restTemplate.getForEntity(
-                String.format("/candidates/summary?election=%s", election), String.class);
+                String.format("/candidate/candidates/summary?election=%s", election), String.class);
         assertThat(responseEntity.getStatusCode().value() == 200);
         assertThat(responseEntity.getBody()).contains(expectedCandidates);
 
@@ -45,7 +45,7 @@ public class CandidateControllerTest {
         );
 
         ResponseEntity<Candidate> responseEntity =
-                restTemplate.postForEntity("/candidates", candidate, Candidate.class);
+                restTemplate.postForEntity("/candidate/candidates", candidate, Candidate.class);
         assertThat(responseEntity.getStatusCode().value() == 201);
         assertThat(responseEntity.getBody().toString()).isEqualTo("John Doe (Test Party)");
     }
@@ -55,7 +55,7 @@ public class CandidateControllerTest {
         String expectedResponse =
                 "{\"message\":\"Simulation data created!\"}";
         ResponseEntity<String> responseEntity =
-                restTemplate.getForEntity("/simulation", String.class);
+                restTemplate.getForEntity("/candidate/simulation", String.class);
         assertThat(responseEntity.getStatusCode().value() == 200);
         assertThat(responseEntity.getBody()).isEqualTo(expectedResponse);
     }
