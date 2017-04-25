@@ -25,35 +25,36 @@ java -jar build/libs/candidate-service-0.3.0.jar
 
 ## Getting Started with the API
 The easiest way to get started with the Candidate and Voter services API, using [HTTPie](https://httpie.org/) from the command line:  
-1. Create sample candidates: `http http://localhost:8097/simulation`  
-2. Create sample voter data: `http http://localhost:8099/simulation?election="2016 Presidential Election"`  
-3. View sample voter results: `http http://localhost:8099/results`
+1. Create sample candidates: `http http://localhost:8097/candidate/simulation`  
+2. View sample candidates: `http http://localhost:8097/candidate/candidates/summary?election=2016%20Presidential%20Election`  
+3. Create sample voter data: `http http://localhost:8099/voter/simulation?election=2016%20Presidential%20Election`  
+4. View sample voter results: `http http://localhost:8099/voter/results`
 
 ## Service Endpoints
 
-By default, the service runs on `localhost`, port `8097`. By default, the service looks for MongoDB on `localhost`, port `27017`.
+By default, the service runs on `localhost`, port `8097`. By default, the service looks for MongoDB on `localhost`, port `27017`. The service uses a context path of `/candidate`. All endpoints must be are prefixed with this sub-path.
 
 Purpose                                                                                                                  | Method  | Endpoint
 ------------------------------------------------------------------------------------------------------------------------ | :------ | :----------------------------------------------------
-Create Set of Sample Candidates                                                                                          | GET     | [/simulation](http://localhost:8097/simulation)
-Submit New Candidate                                                                                                     | POST    | [/candidates](http://localhost:8097/candidates)
-Candidate List                                                                                                           | GET     | [/candidates/summary?election={election}](http://localhost:8097/candidates/summary?election=)
-Service Info                                                                                                             | GET     | [/info](http://localhost:8097/info)
-Service Health                                                                                                           | GET     | [/health](http://localhost:8097/health)
-Service Metrics                                                                                                          | GET     | [/metrics](http://localhost:8097/metrics)
-Other [Spring Actuator](http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready) endpoints | GET     | `/mappings`, `/env`, `/configprops`, etc.
-Other [HATEOAS](https://spring.io/guides/gs/rest-hateoas) endpoints for `/candidates`                                    | Various | DELETE, PATCH, PUT, page sort, size, etc.
+Create Set of Sample Candidates                                                                                          | GET     | [/candidate/simulation](http://localhost:8097/candidate/simulation)
+Submit New Candidate                                                                                                     | POST    | [/candidate/candidates](http://localhost:8097/candidate/candidates)
+Candidate List                                                                                                           | GET     | [/candidate/candidates/summary?election={election}](http://localhost:8097/candidate/candidates/summary?election=)
+Service Info                                                                                                             | GET     | [/candidate/info](http://localhost:8097/candidate/info)
+Service Health                                                                                                           | GET     | [/candidate/health](http://localhost:8097/candidate/health)
+Service Metrics                                                                                                          | GET     | [/candidate/metrics](http://localhost:8097/candidate/metrics)
+Other [Spring Actuator](http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready) endpoints | GET     | `/candidate/mappings`, `/candidate/env`, `/candidate/configprops`, etc.
+Other [HATEOAS](https://spring.io/guides/gs/rest-hateoas) endpoints for `/candidate/candidates`                                    | Various | DELETE, PATCH, PUT, page sort, size, etc.
 
-The [HAL Browser](https://github.com/mikekelly/hal-browser) API browser for the `hal+json` media type is installed alongside the service. It can be accessed at `http://localhost:8097/actuator/`.
+The [HAL Browser](https://github.com/mikekelly/hal-browser) API browser for the `hal+json` media type is installed alongside the service. It can be accessed at `http://localhost:8097/candidate/actuator/`.
 
 ## New Candidate
 
-Adding a new candidate requires an HTTP `POST` request to the `/candidates` endpoint, as follows:
+Adding a new candidate requires an HTTP `POST` request to the `/candidate/candidates` endpoint, as follows:
 
 HTTPie
 
 ```text
-http POST http://localhost:8097/candidates /
+http POST http://localhost:8097/candidate/candidates /
   firstName='Mary' /
   lastName='Smith' /
   politicalParty='Test Party' /
@@ -66,7 +67,7 @@ cURL
 curl -X POST \
   -H "Content-Type: application/json" \
   -d '{ "firstName": "Mary", "lastName": "Smith", "politicalParty": "Test Party", "election": "2016 Presidential Election" }' \
-  "http://localhost:8097/candidates"
+  "http://localhost:8097/candidate/candidates"
 ```
 
 wget
@@ -76,14 +77,14 @@ wget --method POST \
   --header 'content-type: application/json' \
   --body-data '{ "firstName": "Mary", "lastName": "Smith", "politicalParty": "Test Party", "election": "2016 Presidential Election" }' \
   --no-verbose \
-  --output-document - http://localhost:8097/candidates
+  --output-document - http://localhost:8097/candidate/candidates
 ```
 
 ## Sample Output
 
 Using [HTTPie](https://httpie.org/) command line HTTP client.
 
-`http http://localhost:8097/simulation`
+`http http://localhost:8097/candidate/simulation`
 
 ```json
 {
@@ -91,7 +92,7 @@ Using [HTTPie](https://httpie.org/) command line HTTP client.
 }
 ```
 
-`http http://localhost:8097/candidates/summary`
+`http http://localhost:8097/candidate/candidates/summary`
 
 ```json
 {
@@ -106,7 +107,7 @@ Using [HTTPie](https://httpie.org/) command line HTTP client.
 }
 ```
 
-`http http://localhost:8097/candidates`
+`http http://localhost:8097/candidate/candidates`
 
 ```json
 {
@@ -115,10 +116,10 @@ Using [HTTPie](https://httpie.org/) command line HTTP client.
             {
                 "_links": {
                     "candidate": {
-                        "href": "http://localhost:8097/candidates/5872517ea6e0de568921e77a"
+                        "href": "http://localhost:8097/candidate/candidates/5872517ea6e0de568921e77a"
                     },
                     "self": {
-                        "href": "http://localhost:8097/candidates/5872517ea6e0de568921e77a"
+                        "href": "http://localhost:8097/candidate/candidates/5872517ea6e0de568921e77a"
                     }
                 },
                 "firstName": "Donald",
@@ -130,10 +131,10 @@ Using [HTTPie](https://httpie.org/) command line HTTP client.
             {
                 "_links": {
                     "candidate": {
-                        "href": "http://localhost:8097/candidates/5872517ea6e0de568921e77f"
+                        "href": "http://localhost:8097/candidate/candidates/5872517ea6e0de568921e77f"
                     },
                     "self": {
-                        "href": "http://localhost:8097/candidates/5872517ea6e0de568921e77f"
+                        "href": "http://localhost:8097/candidate/candidates/5872517ea6e0de568921e77f"
                     }
                 },
                 "firstName": "Hillary",
@@ -146,10 +147,10 @@ Using [HTTPie](https://httpie.org/) command line HTTP client.
     },
     "_links": {
         "profile": {
-            "href": "http://localhost:8097/profile/candidates"
+            "href": "http://localhost:8097/candidate/profile/candidates"
         },
         "self": {
-            "href": "http://localhost:8097/candidates"
+            "href": "http://localhost:8097/candidate/candidates"
         }
     },
     "page": {
@@ -161,16 +162,16 @@ Using [HTTPie](https://httpie.org/) command line HTTP client.
 }
 ```
 
-`http POST http://localhost:8097/candidates firstName='John' lastName='Doe' politicalParty='Test Party' election='2016 Presidential Election'`
+`http POST http://localhost:8097/candidate/candidates firstName='John' lastName='Doe' politicalParty='Test Party' election='2016 Presidential Election'`
 
 ```json
 {
     "_links": {
         "candidate": {
-            "href": "http://localhost:8097/candidates/5872de29a6e0de6ff01bd452"
+            "href": "http://localhost:8097/candidate/candidates/5872de29a6e0de6ff01bd452"
         },
         "self": {
-            "href": "http://localhost:8097/candidates/5872de29a6e0de6ff01bd452"
+            "href": "http://localhost:8097/candidate/candidates/5872de29a6e0de6ff01bd452"
         }
     },
     "firstName": "John",
@@ -209,6 +210,7 @@ management:
       mode: full
 server:
   port: 8097
+  context-path: /candidate
 spring:
   data:
     mongodb:
@@ -282,6 +284,7 @@ All profile property values may be overridden on the command line, or in a .conf
 java -jar <name_of_jar_file> \
   --spring.profiles.active=aws-production \
   --spring.data.mongodb.host=<new_host_address>
+  -Dlogging.level.root=DEBUG \
   -Djava.security.egd=file:/dev/./urandom
 ```
 
