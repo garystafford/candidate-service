@@ -27,9 +27,9 @@ public class CandidateControllerTest {
     @Test
     public void getCandidatesReturnsListOfCandidates() throws Exception {
        String election = "2016 Presidential Election";
-        String expectedCandidates = "{\"candidates\":[\"Darrell Castle (Constitution Party)\"";
+        String expectedCandidates = "{\"candidates\":[{\"fullName\":\"Darrell Castle\"";
         ResponseEntity<String> responseEntity = this.restTemplate.getForEntity(
-                String.format("/candidates/summary?election=%s", election), String.class);
+                String.format("/candidates/summary/election/%s", election), String.class);
         assertThat(responseEntity.getStatusCode().value() == 200);
         assertThat(responseEntity.getBody()).contains(expectedCandidates);
 
