@@ -6,14 +6,14 @@
 
 The Candidate [Spring Boot](https://projects.spring.io/spring-boot/) Service is a RESTful Web Service, backed by [MongoDB](https://www.mongodb.com/). The Candidate service exposes several HTTP API endpoints, listed below. API users can retrieve a list candidates, add a new candidate, and inspect technical information about the running service. API users can also create a sample list of candidates, based on the 2016 US Presidential Election, by calling the `/simulation` endpoint.
 
-The Voter service is designed to work along with the [Candidate Service](https://github.com/garystafford/candidate-service), as part of a complete API. The Voter service is dependent on the Candidate service to supply a list of candidates. The Candidate service is called by the Voter service, using one of two methods:
-1. [HTTP-based Synchronous IPC](https://www.nginx.com/blog/building-microservices-inter-process-communication/), when either the Voter service's `/candidates?election={election}` or `/simulation?election={election}` endpoints are called.
-2. [Messaging-based Remote Procedure Call (RPC) IPC](http://www.rabbitmq.com/tutorials/tutorial-six-java.html), when either the Voter service's `/candidates/rpc?election={election}` or `/simulation/rpc?election={election}` endpoints are called.
+The Candidate service is designed to work along with the [Voter Service](https://github.com/garystafford/voter-service), as part of a complete API. The Voter service is dependent on the Candidate service to supply a list of candidates. The Candidate service is called by the Voter service, using one of two methods:
+1. [HTTP-based Synchronous IPC](https://www.nginx.com/blog/building-microservices-inter-process-communication/), when either the Voter service's `/voter/candidates/election/{election}` or `/voter/simulation/election/{election}` endpoints are called.
+2. [Messaging-based Remote Procedure Call (RPC) IPC](http://www.rabbitmq.com/tutorials/tutorial-six-java.html), when either the Voter service's `/voter/candidates/rpc/election/{election}` or `/voter/simulation/rpc/election/{election}` endpoints are called.
 
 
 ## Quick Start for Local Development
 
-The Candidate service requires MongoDB to be running locally, on port `27017`. To clone, build, test, and run the Candidate service as a JAR file, locally:
+The Candidate service requires MongoDB to be running locally, on port `27017`, RabbitMQ running on `5672` and `15672`, and the Voter service to be running on `8099`. To clone, build, test, and run the Candidate service as a JAR file, locally:
 
 ```bash
 git clone --depth 1 --branch rabbitmq \
@@ -26,22 +26,25 @@ java -jar build/libs/candidate-service-0.3.0.jar
 ## Getting Started with the API
 The easiest way to get started with the Candidate and Voter services API, using [HTTPie](https://httpie.org/) from the command line:  
 1. Create sample candidates: `http http://localhost:8097/candidate/simulation`  
-2. View sample candidates: `http http://localhost:8097/candidate/candidates/summary?election=2016%20Presidential%20Election`  
-3. Create sample voter data: `http http://localhost:8099/voter/simulation?election=2016%20Presidential%20Election`  
+2. View sample candidates: `http http://localhost:8097/candidate/candidates/summary/election/2016%20Presidential%20Election`  
+3. Create sample voter data: `http http://localhost:8099/voter/simulation/election/2016%20Presidential%20Election`  
 4. View sample voter results: `http http://localhost:8099/voter/results`
 
 Alternately, for step 3 above, you can use Service-to-Service RPC IPC with RabbitMQ, to retrieve the candidates:  
-`http http://localhost:8099/voter/simulation/rpc\?election\=2016%20Presidential%20Election`
+`http http://localhost:8099/voter/simulation/rpc/election/2016%20Presidential%20Election`
 
 ## Service Endpoints
 
-By default, the service runs on `localhost`, port `8097`. By default, the service looks for MongoDB on `localhost`, port `27017`. The service uses a context path of `/candidate`. All endpoints must be are prefixed with this sub-path.
+The service uses a context path of `/candidate`. All endpoints must be are prefixed with this sub-path.
 
 Purpose                                                                                                                  | Method  | Endpoint
 ------------------------------------------------------------------------------------------------------------------------ | :------ | :----------------------------------------------------
 Create Set of Sample Candidates                                                                                          | GET     | [/candidate/simulation](http://localhost:8097/candidate/simulation)
 Submit New Candidate                                                                                                     | POST    | [/candidate/candidates](http://localhost:8097/candidate/candidates)
-Candidate List                                                                                                           | GET     | [/candidate/candidates/summary?election={election}](http://localhost:8097/candidate/candidates/summary?election=)
+Candidates                                                                                                               | GET     | [/candidate/candidates](http://localhost:8097/candidate/candidates)
+Candidate Summary by Election                                                                                                                 | GET     | [/candidate/candidates/search/findByElectionContains?election={election}&projection=candidateVoterView](http://localhost:8097/candidate/candidates/search/findByElectionContains?election={election}&projection=candidateVoterView)
+Candidate Summary                                                                                                        | GET     | [/candidate/candidates/summary](http://localhost:8097/candidate/candidates/summary)
+Candidate Summary by Election                                                                                                                 | GET     | [/candidate/candidates/summary?election={election}](http://localhost:8097/candidate/candidates/summary/election/{election})
 Service Info                                                                                                             | GET     | [/candidate/info](http://localhost:8097/candidate/info)
 Service Health                                                                                                           | GET     | [/candidate/health](http://localhost:8097/candidate/health)
 Service Metrics                                                                                                          | GET     | [/candidate/metrics](http://localhost:8097/candidate/metrics)
@@ -57,10 +60,10 @@ Adding a new candidate requires an HTTP `POST` request to the `/candidate/candid
 HTTPie
 
 ```text
-http POST http://localhost:8097/candidate/candidates /
-  firstName='Mary' /
-  lastName='Smith' /
-  politicalParty='Test Party' /
+http POST http://localhost:8097/candidate/candidates \
+  firstName='Mary' \
+  lastName='Smith' \
+  politicalParty='Test Party' \
   election='2016 Presidential Election'
 ```
 
@@ -95,17 +98,26 @@ Using [HTTPie](https://httpie.org/) command line HTTP client.
 }
 ```
 
-`http http://localhost:8097/candidate/candidates/summary`
+`http http://localhost:8097/candidate/candidates/summary/election/2016%20Presidential%20Election`
 
 ```json
 {
     "candidates": [
-        "Darrell Castle (Constitution Party)",
-        "Hillary Clinton (Democratic Party)",
-        "Gary Johnson (Libertarian Party)",
-        "Chris Keniston (Veterans Party)",
-        "Jill Stein (Green Party)",
-        "Donald Trump (Republican Party)"
+        {
+            "election": "2016 Presidential Election",
+            "fullName": "Darrell Castle",
+            "politicalParty": "Constitution Party"
+        },
+        {
+            "election": "2016 Presidential Election",
+            "fullName": "Hillary Clinton",
+            "politicalParty": "Democratic Party"
+        },
+        {
+            "election": "2016 Presidential Election",
+            "fullName": "Gary Johnson",
+            "politicalParty": "Libertarian Party"
+        }
     ]
 }
 ```
@@ -119,38 +131,43 @@ Using [HTTPie](https://httpie.org/) command line HTTP client.
             {
                 "_links": {
                     "candidate": {
-                        "href": "http://localhost:8097/candidate/candidates/5872517ea6e0de568921e77a"
+                        "href": "http://localhost:8097/candidate/candidates/590549471b8ebf721accc36b{?projection}",
+                        "templated": true
                     },
                     "self": {
-                        "href": "http://localhost:8097/candidate/candidates/5872517ea6e0de568921e77a"
+                        "href": "http://localhost:8097/candidate/candidates/590549471b8ebf721accc36b"
                     }
                 },
-                "firstName": "Donald",
-                "fullName": "Donald Trump",
-                "lastName": "Trump",
-                "politicalParty": "Republican Party",
-                "election": "2016 Presidential Election"
+                "election": "2012 Presidential Election",
+                "firstName": "Rocky",
+                "fullName": "Rocky Anderson",
+                "lastName": "Anderson",
+                "politicalParty": "Justice Party"
             },
             {
                 "_links": {
                     "candidate": {
-                        "href": "http://localhost:8097/candidate/candidates/5872517ea6e0de568921e77f"
+                        "href": "http://localhost:8097/candidate/candidates/590549471b8ebf721accc36c{?projection}",
+                        "templated": true
                     },
                     "self": {
-                        "href": "http://localhost:8097/candidate/candidates/5872517ea6e0de568921e77f"
+                        "href": "http://localhost:8097/candidate/candidates/590549471b8ebf721accc36c"
                     }
                 },
-                "firstName": "Hillary",
-                "fullName": "Hillary Clinton",
-                "lastName": "Clinton",
-                "politicalParty": "Democratic Party",
-                "election": "2016 Presidential Election"
+                "election": "2016 Presidential Election",
+                "firstName": "Darrell",
+                "fullName": "Darrell Castle",
+                "lastName": "Castle",
+                "politicalParty": "Constitution Party"
             }
         ]
     },
     "_links": {
         "profile": {
             "href": "http://localhost:8097/candidate/profile/candidates"
+        },
+        "search": {
+            "href": "http://localhost:8097/candidate/candidates/search"
         },
         "self": {
             "href": "http://localhost:8097/candidate/candidates"
@@ -159,29 +176,34 @@ Using [HTTPie](https://httpie.org/) command line HTTP client.
     "page": {
         "number": 0,
         "size": 20,
-        "totalElements": 2,
+        "totalElements": 12,
         "totalPages": 1
     }
 }
 ```
 
-`http POST http://localhost:8097/candidate/candidates firstName='John' lastName='Doe' politicalParty='Test Party' election='2016 Presidential Election'`
+`http POST http://localhost:8097/candidate/candidates \
+    firstName='John' \
+    lastName='Doe' \
+    politicalParty='Test Party' \
+    election='2016 Presidential Election'`
 
 ```json
-{
+
     "_links": {
         "candidate": {
-            "href": "http://localhost:8097/candidate/candidates/5872de29a6e0de6ff01bd452"
+            "href": "http://localhost:8097/candidate/candidates/59054a341b8ebf721accc378{?projection}",
+            "templated": true
         },
         "self": {
-            "href": "http://localhost:8097/candidate/candidates/5872de29a6e0de6ff01bd452"
+            "href": "http://localhost:8097/candidate/candidates/59054a341b8ebf721accc378"
         }
     },
+    "election": "2016 Presidential Election",
     "firstName": "John",
     "fullName": "John Doe",
     "lastName": "Doe",
-    "politicalParty": "Test Party",
-    "election": "2016 Presidential Election"
+    "politicalParty": "Test Party"
 }
 ```
 

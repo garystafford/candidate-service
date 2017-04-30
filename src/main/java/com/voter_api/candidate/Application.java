@@ -1,4 +1,4 @@
-package com.candidate;
+package com.voter_api.candidate;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

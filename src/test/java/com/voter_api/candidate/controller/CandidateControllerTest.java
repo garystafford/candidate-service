@@ -1,6 +1,6 @@
-package com.candidate.controller;
+package com.voter_api.candidate.controller;
 
-import com.candidate.domain.Candidate;
+import com.voter_api.candidate.domain.Candidate;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -1,6 +1,6 @@
-package com.candidate.service;
+package com.voter_api.candidate.service;
 
-import com.candidate.domain.Candidate;
+import com.voter_api.candidate.domain.Candidate;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ public class CandidateDemoListService {
 
     private void setCandidates() {
         candidates.add(new Candidate("Mitt", "Romney", "Republican Party", "2012 Presidential Election"));
-        candidates.add(new Candidate("Rocky ", "Anderson", "Justice Party", "2012 Presidential Election"));
+        candidates.add(new Candidate("Rocky", "Anderson", "Justice Party", "2012 Presidential Election"));
         candidates.add(new Candidate("Jill", "Stein", "Green Party", "2012 Presidential Election"));
         candidates.add(new Candidate("Gary", "Johnson", "Libertarian Party", "2012 Presidential Election"));
         candidates.add(new Candidate("Virgil", "Goode", "Constitution Party", "2012 Presidential Election"));

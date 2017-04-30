@@ -1,4 +1,4 @@
-package com.candidate.domain;
+package com.voter_api.candidate.domain;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import org.springframework.data.annotation.Id;
@@ -53,6 +53,6 @@ public class Candidate {
 
     @Override
     public String toString() {
-        return String.format("%s %s (%s)", firstName, lastName, politicalParty);
+        return String.format("%s (%s)", getFullName(), politicalParty);
     }
 }
