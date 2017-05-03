@@ -6,6 +6,8 @@ import com.voter_api.candidate.domain.Candidate;
 import com.voter_api.candidate.domain.CandidateVoterView;
 import com.voter_api.candidate.repository.CandidateRepository;
 import com.voter_api.candidate.service.CandidateDemoListService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -27,6 +29,8 @@ import static org.springframework.data.mongodb.core.aggregation.Aggregation.sort
 
 @RestController
 public class CandidateController {
+
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     private MongoTemplate mongoTemplate;
 
@@ -50,7 +54,6 @@ public class CandidateController {
      */
     @RequestMapping(value = "/candidates/summary", method = RequestMethod.GET)
     public ResponseEntity<Map<String, List<CandidateVoterView>>> getCandidates() {
-
         Aggregation aggregation = Aggregation.newAggregation(
                 Aggregation.project("firstName", "lastName", "politicalParty", "election")
                         .andExpression("concat(firstName,' ', lastName)")
@@ -74,7 +77,6 @@ public class CandidateController {
      */
     @RequestMapping(value = "/candidates/summary/election/{election}", method = RequestMethod.GET)
     public ResponseEntity<Map<String, List<CandidateVoterView>>> getCandidatesByElection(@PathVariable("election") String election) {
-
         List<CandidateVoterView> candidates = getByElection(election);
         return new ResponseEntity<>(Collections.singletonMap("candidates", candidates), HttpStatus.OK);
     }
@@ -88,9 +90,8 @@ public class CandidateController {
      */
     @RabbitListener(queues = "voter.rpc.requests")
     private String getCandidatesMessageRpc(String requestMessage) {
-
-        System.out.printf("Request message: %s%n", requestMessage);
-        System.out.println("Sending RPC response message with list of candidates...");
+        log.debug("Request message: %s%n", requestMessage);
+        log.debug("Sending RPC response message with list of candidates...");
 
         List<CandidateVoterView> candidates = getByElection(requestMessage);
 
@@ -104,7 +105,6 @@ public class CandidateController {
      * @return
      */
     private List<CandidateVoterView> getByElection(String election) {
-
         Aggregation aggregation = Aggregation.newAggregation(
                 Aggregation.match(Criteria.where("election").is(election)),
                 project("firstName", "lastName", "politicalParty", "election")
@@ -122,6 +122,7 @@ public class CandidateController {
 
     /**
      * Serialize list of candidates to JSON
+     *
      * @param candidates
      * @return
      */
@@ -135,6 +136,8 @@ public class CandidateController {
             e.printStackTrace();
         }
 
+        log.debug(jsonInString);
+
         return jsonInString;
     }
 
@@ -145,7 +148,6 @@ public class CandidateController {
      */
     @RequestMapping(value = "/simulation", method = RequestMethod.GET)
     public ResponseEntity<Map<String, String>> getSimulation() {
-
         candidateRepository.deleteAll();
         candidateRepository.save(candidateDemoListService.getCandidates());
         Map<String, String> result = new HashMap<>();
