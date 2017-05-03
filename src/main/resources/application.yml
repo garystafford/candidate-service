@@ -17,6 +17,8 @@ server:
   port: 8097
   context-path: /candidate
 spring:
+  application:
+    name: Candidate Service
   data:
     mongodb:
       database: candidates
