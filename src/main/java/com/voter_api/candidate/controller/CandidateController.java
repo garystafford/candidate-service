@@ -93,14 +93,8 @@ public class CandidateController {
         System.out.println("Sending RPC response message with list of candidates...");
 
         List<CandidateVoterView> candidates = getByElection(requestMessage);
-        ObjectMapper mapper = new ObjectMapper();
-        String jsonInString = "";
-        try {
-            jsonInString = mapper.writeValueAsString(candidates);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        return jsonInString;
+
+        return serializeToJson(candidates);
     }
 
     /**
@@ -122,7 +116,26 @@ public class CandidateController {
         AggregationResults<CandidateVoterView> groupResults
                 = mongoTemplate.aggregate(aggregation, Candidate.class, CandidateVoterView.class);
         List<CandidateVoterView> candidates = groupResults.getMappedResults();
+
         return candidates;
+    }
+
+    /**
+     * Serialize list of candidates to JSON
+     * @param candidates
+     * @return
+     */
+    private String serializeToJson(List<CandidateVoterView> candidates) {
+        ObjectMapper mapper = new ObjectMapper();
+        String jsonInString = "";
+
+        try {
+            jsonInString = mapper.writeValueAsString(candidates);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+        return jsonInString;
     }
 
     /**
