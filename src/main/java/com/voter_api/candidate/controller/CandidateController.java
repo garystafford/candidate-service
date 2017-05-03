@@ -90,7 +90,7 @@ public class CandidateController {
      */
     @RabbitListener(queues = "voter.rpc.requests")
     private String getCandidatesMessageRpc(String requestMessage) {
-        log.debug("Request message: %s%n", requestMessage);
+        log.debug("Request message: {}", requestMessage);
         log.debug("Sending RPC response message with list of candidates...");
 
         List<CandidateVoterView> candidates = getByElection(requestMessage);
