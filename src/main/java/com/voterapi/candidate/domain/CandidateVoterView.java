@@ -1,8 +1,4 @@
-package com.voter_api.candidate.domain;
-
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+package com.voterapi.candidate.domain;
 
 import java.io.Serializable;
 

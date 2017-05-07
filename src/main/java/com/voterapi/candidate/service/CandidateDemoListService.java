@@ -1,6 +1,6 @@
-package com.voter_api.candidate.service;
+package com.voterapi.candidate.service;
 
-import com.voter_api.candidate.domain.Candidate;
+import com.voterapi.candidate.domain.Candidate;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

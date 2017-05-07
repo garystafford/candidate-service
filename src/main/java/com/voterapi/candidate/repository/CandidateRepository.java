@@ -1,6 +1,6 @@
-package com.voter_api.candidate.repository;
+package com.voterapi.candidate.repository;
 
-import com.voter_api.candidate.domain.Candidate;
+import com.voterapi.candidate.domain.Candidate;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.repository.query.Param;
 

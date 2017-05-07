@@ -1,4 +1,4 @@
-package com.voter_api.candidate.domain;
+package com.voterapi.candidate.domain;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.rest.core.config.Projection;

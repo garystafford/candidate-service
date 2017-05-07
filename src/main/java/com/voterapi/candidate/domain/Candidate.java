@@ -1,4 +1,4 @@
-package com.voter_api.candidate.domain;
+package com.voterapi.candidate.domain;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import org.springframework.data.annotation.Id;

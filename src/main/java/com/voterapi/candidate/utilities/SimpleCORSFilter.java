@@ -1,4 +1,4 @@
-package com.voter_api.candidate.utilities;
+package com.voterapi.candidate.utilities;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,10 +14,15 @@ public class SimpleCORSFilter implements Filter {
 
     // reference: http://stackoverflow.com/a/32320294/580268
 
-    private final Logger log = LoggerFactory.getLogger(SimpleCORSFilter.class);
+    private final Logger logger = LoggerFactory.getLogger(SimpleCORSFilter.class);
 
     public SimpleCORSFilter() {
-        log.info("SimpleCORSFilter init");
+        logger.info("SimpleCORSFilter init");
+    }
+
+    @Override
+    public void init(FilterConfig filterConfig) throws ServletException {
+
     }
 
     @Override
@@ -35,11 +40,7 @@ public class SimpleCORSFilter implements Filter {
     }
 
     @Override
-    public void init(FilterConfig filterConfig) {
-    }
-
-    @Override
     public void destroy() {
-    }
 
+    }
 }

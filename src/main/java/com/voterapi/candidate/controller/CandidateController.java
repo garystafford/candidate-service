@@ -1,11 +1,11 @@
-package com.voter_api.candidate.controller;
+package com.voterapi.candidate.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.voter_api.candidate.domain.Candidate;
-import com.voter_api.candidate.domain.CandidateVoterView;
-import com.voter_api.candidate.repository.CandidateRepository;
-import com.voter_api.candidate.service.CandidateDemoListService;
+import com.voterapi.candidate.domain.Candidate;
+import com.voterapi.candidate.domain.CandidateVoterView;
+import com.voterapi.candidate.repository.CandidateRepository;
+import com.voterapi.candidate.service.CandidateDemoListService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -22,7 +22,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.project;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.sort;
@@ -30,7 +33,7 @@ import static org.springframework.data.mongodb.core.aggregation.Aggregation.sort
 @RestController
 public class CandidateController {
 
-    private final Logger log = LoggerFactory.getLogger(this.getClass());
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private MongoTemplate mongoTemplate;
 
@@ -90,8 +93,8 @@ public class CandidateController {
      */
     @RabbitListener(queues = "voter.rpc.requests")
     private String getCandidatesMessageRpc(String requestMessage) {
-        log.debug("Request message: {}", requestMessage);
-        log.debug("Sending RPC response message with list of candidates...");
+        logger.debug("Request message: {}", requestMessage);
+        logger.debug("Sending RPC response message with list of candidates...");
 
         List<CandidateVoterView> candidates = getByElection(requestMessage);
 
@@ -115,9 +118,8 @@ public class CandidateController {
 
         AggregationResults<CandidateVoterView> groupResults
                 = mongoTemplate.aggregate(aggregation, Candidate.class, CandidateVoterView.class);
-        List<CandidateVoterView> candidates = groupResults.getMappedResults();
 
-        return candidates;
+        return groupResults.getMappedResults();
     }
 
     /**
@@ -133,10 +135,10 @@ public class CandidateController {
         try {
             jsonInString = mapper.writeValueAsString(candidates);
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            logger.info(String.valueOf(e));
         }
 
-        log.debug(jsonInString);
+        logger.debug(jsonInString);
 
         return jsonInString;
     }

@@ -1,4 +1,4 @@
-package com.voter_api.candidate.configuration;
+package com.voterapi.candidate.configuration;
 
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
