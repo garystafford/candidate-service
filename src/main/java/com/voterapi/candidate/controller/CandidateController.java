@@ -2,6 +2,7 @@ package com.voterapi.candidate.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.voterapi.candidate.domain.Candidate;
 import com.voterapi.candidate.domain.CandidateVoterView;
 import com.voterapi.candidate.repository.CandidateRepository;
@@ -132,8 +133,11 @@ public class CandidateController {
         ObjectMapper mapper = new ObjectMapper();
         String jsonInString = "";
 
+        final Map<String, List<CandidateVoterView>> dataMap = new HashMap<>();
+        dataMap.put("candidates", candidates);
+
         try {
-            jsonInString = mapper.writeValueAsString(candidates);
+            jsonInString = mapper.writeValueAsString(dataMap);
         } catch (JsonProcessingException e) {
             logger.info(String.valueOf(e));
         }
