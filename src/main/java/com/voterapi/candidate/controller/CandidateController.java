@@ -2,7 +2,6 @@ package com.voterapi.candidate.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.voterapi.candidate.domain.Candidate;
 import com.voterapi.candidate.domain.CandidateVoterView;
 import com.voterapi.candidate.repository.CandidateRepository;
