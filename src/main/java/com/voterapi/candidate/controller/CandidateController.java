@@ -141,7 +141,7 @@ public class CandidateController {
             logger.info(String.valueOf(e));
         }
 
-        logger.debug(jsonInString);
+        logger.debug("Serialized message payload: {}", jsonInString);
 
         return jsonInString;
     }
