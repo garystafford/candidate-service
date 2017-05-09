@@ -4,9 +4,11 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.io.Serializable;
+
 @Document
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
-public class Candidate {
+public class Candidate implements Serializable {
 
     @Id
     private String id;
@@ -20,7 +22,10 @@ public class Candidate {
         // unused constructor
     }
 
-    public Candidate(String firstName, String lastName, String politicalParty, String election) {
+    public Candidate(String firstName,
+                     String lastName,
+                     String politicalParty,
+                     String election) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.politicalParty = politicalParty;
