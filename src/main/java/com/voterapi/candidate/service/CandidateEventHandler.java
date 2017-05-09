@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.voterapi.candidate.domain.Candidate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.amqp.core.FanoutExchange;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +53,7 @@ public class CandidateEventHandler {
             logger.info(String.valueOf(e));
         }
 
-        logger.debug("Message payload: {}", jsonInString);
+        logger.debug("Serialized message payload: {}", jsonInString);
 
         return jsonInString;
     }
