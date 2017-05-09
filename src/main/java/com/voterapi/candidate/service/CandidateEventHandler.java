@@ -22,8 +22,6 @@ public class CandidateEventHandler {
 
     private Queue candidateQueue;
 
-    private Candidate candidate;
-
     @Autowired
     public CandidateEventHandler(RabbitTemplate rabbitTemplate, Queue candidateQueue) {
         this.rabbitTemplate = rabbitTemplate;
@@ -33,11 +31,10 @@ public class CandidateEventHandler {
 
     @HandleAfterCreate
     public void handleCandidateSave(Candidate candidate) {
-        this.candidate = candidate;
-        sendMessage();
+        sendMessage(candidate);
     }
 
-    private void sendMessage() {
+    private void sendMessage(Candidate candidate) {
         rabbitTemplate.convertAndSend(
                 candidateQueue.getName(), serializeToJson(candidate));
 
