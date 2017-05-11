@@ -6,9 +6,10 @@
 
 The Candidate [Spring Boot](https://projects.spring.io/spring-boot/) Service is a RESTful Web Service, backed by [MongoDB](https://www.mongodb.com/). The Candidate service exposes several HTTP API endpoints, listed below. API users can retrieve a list candidates, add a new candidate, and inspect technical information about the running service. API users can also create a sample list of candidates, based on the 2016 US Presidential Election, by calling the `/simulation` endpoint.
 
-The Candidate service is designed to work along with the [Voter Service](https://github.com/garystafford/voter-service), as part of a complete API. The Voter service is dependent on the Candidate service to supply a list of candidates. The Candidate service is called by the Voter service, using one of two methods:
+The Candidate service is designed to work along with the [Voter Service](https://github.com/garystafford/voter-service), as part of a complete API. The Voter service is dependent on the Candidate service to supply a list of candidates. The Candidate service is called by the Voter service, using one of three methods:
 1. [HTTP-based Synchronous IPC](https://www.nginx.com/blog/building-microservices-inter-process-communication/), when either the Voter service's `/voter/candidates/election/{election}` or `/voter/simulation/election/{election}` endpoints are called.
-2. [Messaging-based Remote Procedure Call (RPC) IPC](http://www.rabbitmq.com/tutorials/tutorial-six-java.html), when either the Voter service's `/voter/candidates/rpc/election/{election}` or `/voter/simulation/rpc/election/{election}` endpoints are called.
+2. [Messaging-based Remote Procedure Call (RPC) IPC](https://www.rabbitmq.com/tutorials/tutorial-six-spring-amqp.html), when either the Voter service's `/voter/candidates/rpc/election/{election}` or `/voter/simulation/rpc/election/{election}` endpoints are called.
+3. [Messaging-based Eventual Consistency](https://www.rabbitmq.com/tutorials/tutorial-one-spring-amqp.html), when either the Voter service's `/voter/candidates/db/election/{election}` or `/voter/simulation/db/election/{election}` endpoints are called.
 
 
 ## Quick Start for Local Development
@@ -30,9 +31,11 @@ The easiest way to get started with the Candidate and Voter services API, using 
 3. Create sample voter data: `http http://localhost:8099/voter/simulation/election/2016%20Presidential%20Election`  
 4. View sample voter results: `http http://localhost:8099/voter/results`
 
-Alternately, for step 3 above, you can use Service-to-Service RPC IPC with RabbitMQ, to retrieve the candidates:  
+Alternately, for step 3 above, you can use service-to-service RPC IPC with RabbitMQ, to retrieve the candidates:  
 `http http://localhost:8099/voter/simulation/rpc/election/2016%20Presidential%20Election`
 
+Alternately, for step 3 above, you can use eventual consistency using RabbitMQ, to retrieve the candidates from MongoDB:  
+`http http://localhost:8099/voter/simulation/db/election/2016%20Presidential%20Election`
 ## Service Endpoints
 
 The service uses a context path of `/candidate`. All endpoints must be are prefixed with this sub-path.
