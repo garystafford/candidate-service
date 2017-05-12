@@ -34,11 +34,8 @@ import static org.springframework.data.mongodb.core.aggregation.Aggregation.sort
 public class CandidateController {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
     private MongoTemplate mongoTemplate;
-
     private CandidateRepository candidateRepository;
-
     private CandidateDemoListService candidateDemoListService;
 
     @Autowired

@@ -10,21 +10,41 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class CandidateConfig {
 
+    /**
+     * Used for RPC IPC example
+     *
+     * @return
+     */
     @Bean
     public Queue queue() {
         return new Queue("voter.rpc.requests");
     }
 
+    /**
+     * Used for RPC IPC example
+     *
+     * @return
+     */
     @Bean
     public DirectExchange exchange() {
         return new DirectExchange("voter.rpc");
     }
 
+    /**
+     * Used for RPC IPC example
+     *
+     * @return
+     */
     @Bean
     public Binding binding(DirectExchange exchange, Queue queue) {
         return BindingBuilder.bind(queue).to(exchange).with("rpc");
     }
 
+    /**
+     * Used for eventually consistent example
+     *
+     * @return
+     */
     @Bean
     public Queue candidateQueue() {
         return new Queue("candidates.queue");

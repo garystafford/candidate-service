@@ -17,9 +17,7 @@ import org.springframework.stereotype.Component;
 public class CandidateEventHandler {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
     private RabbitTemplate rabbitTemplate;
-
     private Queue candidateQueue;
 
     @Autowired
@@ -27,7 +25,6 @@ public class CandidateEventHandler {
         this.rabbitTemplate = rabbitTemplate;
         this.candidateQueue = candidateQueue;
     }
-
 
     @HandleAfterCreate
     public void handleCandidateSave(Candidate candidate) {
@@ -37,7 +34,6 @@ public class CandidateEventHandler {
     private void sendMessage(Candidate candidate) {
         rabbitTemplate.convertAndSend(
                 candidateQueue.getName(), serializeToJson(candidate));
-
     }
 
     private String serializeToJson(Candidate candidate) {
@@ -54,5 +50,4 @@ public class CandidateEventHandler {
 
         return jsonInString;
     }
-
 }
