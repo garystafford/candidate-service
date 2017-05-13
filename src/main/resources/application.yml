@@ -35,7 +35,6 @@ spring:
     host: rabbitmq
   profiles: docker-local
 ---
----
 endpoints:
   enabled: false
   health:
