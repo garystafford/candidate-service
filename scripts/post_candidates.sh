@@ -61,7 +61,7 @@ done
 TIME2=$(date +%s)
 
 TIME3=`expr ${TIME2} - ${TIME1}`
-TESTS=`expr ${TEST_CYCLES} * 6`
+TESTS=`expr ${TEST_CYCLES} \* 6`
 
 echo ""
 echo "It took ${TIME3} seconds for ${TEST_CYCLES} test cycles, or ${TESTS}"
