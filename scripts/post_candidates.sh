@@ -60,7 +60,7 @@ do
     --headers > /dev/null
   TIMEB=`expr $(date +%s%N) / 1000000`
   TIMEC=`expr ${TIMEB} - ${TIMEA}`
-  echo "${TIMEC} ms for HTTP POST"
+  echo "${TIMEC} ms for 6 HTTP POST requests"
 done
 TIME2=$(date +%s)
 
