@@ -59,8 +59,8 @@ do
     election="${ELECTION}" \
     --headers > /dev/null
   TIMEB=`expr $(date +%s%N) / 1000000`
-  TIMEC=`expr ${TIMEA} - ${TIMEB}`
-  echo "${TIMEC} milliseconds for HTTP POST requests"
+  TIMEC=`expr ${TIMEB} - ${TIMEA}`
+  echo "${TIMEC} ms for HTTP POST"
 done
 TIME2=$(date +%s)
 
