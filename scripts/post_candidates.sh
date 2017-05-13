@@ -16,7 +16,7 @@ echo "POSTing new candidates..."
 TIME1=$(date +%s)
 for i in $(seq ${TEST_CYCLES})
 do
-  TIMEA=($(date +%s%N)/1000000)
+  TIMEA=$(`expr $(date +%s%N) / 1000000`)
   echo ${TIMEA}
   http POST ${URL}/candidate/candidates \
     firstName='Donald' \
