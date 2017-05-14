@@ -8,5 +8,5 @@ import java.util.List;
 
 
 public interface CandidateRepository extends MongoRepository<Candidate, String> {
-        List<Candidate> findByElectionContains(@Param("election") String election);
+    List<Candidate> findByElectionContains(@Param("election") String election);
 }

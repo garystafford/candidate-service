@@ -50,8 +50,9 @@ public class CandidateConfig {
         return new Queue("candidates.queue");
     }
 
-//    @Bean
-//    public FanoutExchange candidateFanoutExchange() {
-//        return new FanoutExchange("candidate.fanout");
-//    }
+
+    @Bean
+    public Queue electionQueue() {
+        return new Queue("elections.queue");
+    }
 }
