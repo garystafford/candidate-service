@@ -11,6 +11,7 @@ The Candidate service is designed to work along with the [Voter Service](https:/
 2. [Messaging-based Remote Procedure Call (RPC) IPC](https://www.rabbitmq.com/tutorials/tutorial-six-spring-amqp.html), when either the Voter service's `/voter/candidates/rpc/election/{election}` or `/voter/simulation/rpc/election/{election}` endpoints are called.
 3. [Messaging-based Eventual Consistency](https://www.rabbitmq.com/tutorials/tutorial-one-spring-amqp.html), when either the Voter service's `/voter/candidates/db/election/{election}` or `/voter/simulation/db/election/{election}` endpoints are called.
 
+![Voter API Architecture](Message_Queue_Diagram_4.png)
 
 ## Quick Start for Local Development
 
@@ -214,7 +215,7 @@ Using [HTTPie](https://httpie.org/) command line HTTP client.
 
 The project's source code is continuously built and tested on every commit to [GitHub](https://github.com/garystafford/candidate-service), using [Travis CI](https://travis-ci.org/garystafford/candidate-service). If all unit tests pass, the resulting Spring Boot JAR is pushed to the `build-artifacts` branch of the [candidate-service](https://github.com/garystafford/candidate-service/tree/build-artifacts) GitHub repository. The JAR's filename is incremented with each successful build (i.e. `candidate-service-0.3.18.jar`).
 
-![Vote Continuous Integration Pipeline](Voter-CI.png)
+![Vote Continuous Integration Pipeline](voter_flow.png)
 
 ## Spring Profiles
 
