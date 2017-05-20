@@ -16,7 +16,7 @@ echo "POSTing new candidates..."
 TIME1=$(date +%s)
 for i in $(seq ${TEST_CYCLES})
 do
-  TIMEA=`expr $(date +%s%N) / 1000000`
+  # TIMEA=`expr $(date +%s%N) / 1000000`
   http POST ${URL}/candidate/candidates \
     firstName='Donald' \
     lastName='Trump' \
@@ -58,9 +58,9 @@ do
     politicalParty='Democratic Party' \
     election="${ELECTION}" \
     --headers > /dev/null
-  TIMEB=`expr $(date +%s%N) / 1000000`
-  TIMEC=`expr ${TIMEB} - ${TIMEA}`
-  echo "${TIMEC} ms for 6 HTTP POST requests"
+  # TIMEB=`expr $(date +%s%N) / 1000000`
+  # TIMEC=`expr ${TIMEB} - ${TIMEA}`
+  # echo "${TIMEC} ms for 6 HTTP POST requests"
 done
 TIME2=$(date +%s)
 

@@ -4,7 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.voterapi.candidate.domain.Candidate;
 import com.voterapi.candidate.domain.CandidateVoterView;
+import com.voterapi.candidate.domain.Election;
 import com.voterapi.candidate.repository.CandidateRepository;
+import com.voterapi.candidate.repository.ElectionRepository;
 import com.voterapi.candidate.service.CandidateDemoListService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,14 +38,17 @@ public class CandidateController {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private MongoTemplate mongoTemplate;
     private CandidateRepository candidateRepository;
+    private ElectionRepository electionRepository;
     private CandidateDemoListService candidateDemoListService;
 
     @Autowired
     public CandidateController(MongoTemplate mongoTemplate,
                                CandidateRepository candidateRepository,
+                               ElectionRepository electionRepository,
                                CandidateDemoListService candidateDemoListService) {
         this.mongoTemplate = mongoTemplate;
         this.candidateRepository = candidateRepository;
+        this.electionRepository = electionRepository;
         this.candidateDemoListService = candidateDemoListService;
     }
 
@@ -155,6 +160,25 @@ public class CandidateController {
         Map<String, String> result = new HashMap<>();
         result.put("message", "Simulation data created!");
 
-        return ResponseEntity.status(HttpStatus.OK).body(result); // return 200 with payload
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
+
+    @RequestMapping(value = "/candidates/drop", method = RequestMethod.GET)
+    public ResponseEntity<Map<String, String>> deleteAllCandidates() {
+        candidateRepository.deleteAll();
+        Map<String, String> result = new HashMap<>();
+        result.put("message", "All candidates deleted!");
+
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
+    @RequestMapping(value = "/elections/drop", method = RequestMethod.GET)
+    public ResponseEntity<Map<String, String>> deleteAllElections() {
+        electionRepository.deleteAll();
+        Map<String, String> result = new HashMap<>();
+        result.put("message", "All elections deleted!");
+
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
 }
