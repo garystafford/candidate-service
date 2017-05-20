@@ -61,17 +61,17 @@ public class CandidateControllerTest {
     }
 
     @Test
-    public void deleteAllCandidates() throws Exception {
+    public void deleteAllCandidatesReturnsExpectedStatusCode() throws Exception {
         ResponseEntity<Void> responseEntity =
-                restTemplate.getForEntity("/candidates/drop", Void.class);
+                restTemplate.postForEntity("/candidates/drop", null, Void.class);
         assertThat(responseEntity.getStatusCode().value() == 204).isTrue();
         assertThat(responseEntity.getBody()).isEqualTo(null);
     }
 
     @Test
-    public void deleteAllElections() throws Exception {
+    public void deleteAllElectionsReturnsExpectedStatusCode() throws Exception {
         ResponseEntity<Void> responseEntity =
-                restTemplate.getForEntity("/elections/drop", Void.class);
+                restTemplate.postForEntity("/elections/drop", null, Void.class);
         assertThat(responseEntity.getStatusCode().value() == 204).isTrue();
         assertThat(responseEntity.getBody()).isEqualTo(null);
     }

@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.voterapi.candidate.domain.Candidate;
 import com.voterapi.candidate.domain.CandidateVoterView;
-import com.voterapi.candidate.domain.Election;
 import com.voterapi.candidate.repository.CandidateRepository;
 import com.voterapi.candidate.repository.ElectionRepository;
 import com.voterapi.candidate.service.CandidateDemoListService;
@@ -163,13 +162,13 @@ public class CandidateController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-    @RequestMapping(value = "/candidates/drop", method = RequestMethod.GET)
+    @RequestMapping(value = "/candidates/drop", method = RequestMethod.POST)
     public ResponseEntity<Void> deleteAllCandidates() {
         candidateRepository.deleteAll();
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @RequestMapping(value = "/elections/drop", method = RequestMethod.GET)
+    @RequestMapping(value = "/elections/drop", method = RequestMethod.POST)
     public ResponseEntity<Void> deleteAllElections() {
         electionRepository.deleteAll();
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
