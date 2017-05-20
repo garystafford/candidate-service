@@ -164,21 +164,15 @@ public class CandidateController {
     }
 
     @RequestMapping(value = "/candidates/drop", method = RequestMethod.GET)
-    public ResponseEntity<Map<String, String>> deleteAllCandidates() {
+    public ResponseEntity<Void> deleteAllCandidates() {
         candidateRepository.deleteAll();
-        Map<String, String> result = new HashMap<>();
-        result.put("message", "All candidates deleted!");
-
-        return ResponseEntity.status(HttpStatus.OK).body(result);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @RequestMapping(value = "/elections/drop", method = RequestMethod.GET)
-    public ResponseEntity<Map<String, String>> deleteAllElections() {
+    public ResponseEntity<Void> deleteAllElections() {
         electionRepository.deleteAll();
-        Map<String, String> result = new HashMap<>();
-        result.put("message", "All elections deleted!");
-
-        return ResponseEntity.status(HttpStatus.OK).body(result);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
 }
