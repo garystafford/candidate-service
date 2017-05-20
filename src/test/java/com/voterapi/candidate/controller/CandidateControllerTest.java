@@ -59,4 +59,25 @@ public class CandidateControllerTest {
         assertThat(responseEntity.getStatusCode().value() == 200).isTrue();
         assertThat(responseEntity.getBody()).isEqualTo(expectedResponse);
     }
+
+    @Test
+    public void deleteAllCandidates() throws Exception {
+        String expectedResponse =
+                "{\"message\":\"All candidates deleted!\"}";
+        ResponseEntity<String> responseEntity =
+                restTemplate.getForEntity("/candidates/drop", String.class);
+        assertThat(responseEntity.getStatusCode().value() == 200).isTrue();
+        assertThat(responseEntity.getBody()).isEqualTo(expectedResponse);
+    }
+
+    @Test
+    public void deleteAllElections() throws Exception {
+        String expectedResponse =
+                "{\"message\":\"All elections deleted!\"}";
+        ResponseEntity<String> responseEntity =
+                restTemplate.getForEntity("/elections/drop", String.class);
+        assertThat(responseEntity.getStatusCode().value() == 200).isTrue();
+        assertThat(responseEntity.getBody()).isEqualTo(expectedResponse);
+    }
+
 }
