@@ -7,8 +7,8 @@
 set -e
 
 HOST=${1:-localhost}
-TEST_CYCLES=${2:-25}
-URL="http://${HOST}:8097"
+TEST_CYCLES=${2:-1}
+URL="http://${HOST}:8080"
 ELECTION="2016 Presidential Election"
 
 echo "POSTing new candidates..."
