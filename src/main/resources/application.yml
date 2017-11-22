@@ -14,7 +14,7 @@ management:
     git:
       mode: full
 server:
-  port: 8080
+  port: 8097
   context-path: /candidate
 spring:
   application:
@@ -59,6 +59,8 @@ spring:
     host: "10.0.1.8"
   profiles: aws-production
 ---
+server:
+  port: 8080
 spring:
   data:
     mongodb:
