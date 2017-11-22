@@ -1,8 +1,8 @@
-FROM openjdk:8u121-jdk-alpine
-LABEL maintainer "Gary A. Stafford <garystafford@rochester.rr.com>"
-ENV REFRESHED_AT 2017-02-02
+FROM openjdk:8u131-jdk-alpine
+LABEL maintainer="Gary A. Stafford <garystafford@rochester.rr.com>"
+ENV REFRESHED_AT 2017-11-21
 VOLUME /tmp
-EXPOSE 8097
+EXPOSE 8080
 RUN set -ex \
   && apk update \
   && apk upgrade \
@@ -12,5 +12,4 @@ RUN mkdir /candidate \
       "https://github.com/garystafford/candidate-service.git" /candidate \
   && cd /candidate \
   && mv candidate-service-*.jar candidate-service.jar
-ENV JAVA_OPTS=""
 CMD [ "java", "-Djava.security.egd=file:/dev/./urandom", "-jar", "candidate/candidate-service.jar" ]
