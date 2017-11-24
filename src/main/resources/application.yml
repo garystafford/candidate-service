@@ -26,6 +26,13 @@ spring:
       port: 27017
   rabbitmq:
     host: localhost
+azure:
+  service-bus:
+    connection-string: "Endpoint=sb://voterapp.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=pFW+LupYZRsqAahkD/tavLbAWU0p0p60qqHgIEqfCBU="
+    queue-name:
+      candidate: candidates.queue
+      election: elections.queue
+      voter: voters.queue
 ---
 spring:
   data:
