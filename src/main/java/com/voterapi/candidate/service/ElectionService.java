@@ -28,25 +28,34 @@ public class ElectionService {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private ElectionRepository electionRepository;
-    private IQueueClient queueClientReceiverElection;
+    private Environment environment;
 
     @Autowired
-    public ElectionService(ElectionRepository electionRepository, IQueueClient queueClientReceiverElection) {
+    public ElectionService(ElectionRepository electionRepository, Environment environment) {
         this.electionRepository = electionRepository;
-        this.queueClientReceiverElection = queueClientReceiverElection;
+        this.environment = environment;
         getElectionMessageAzure();
     }
 
     public void getElectionMessageAzure() {
+        String connectionString = getServiceBusConnectionString();
+        String queueName = environment.getProperty("azure.service-bus.queue-name.election");
 
         try {
-            queueClientReceiverElection.registerMessageHandler(new MessageHandler(queueClientReceiverElection),
+            IQueueClient queueReceiveClient = new QueueClient(
+                    new ConnectionStringBuilder(connectionString, queueName), ReceiveMode.PEEKLOCK);
+
+            queueReceiveClient.registerMessageHandler(new MessageHandler(queueReceiveClient),
                     new MessageHandlerOptions(1, false, Duration.ofMinutes(1)));
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ServiceBusException e) {
+        } catch (InterruptedException | ServiceBusException e) {
             e.printStackTrace();
         }
+    }
+
+    private String getServiceBusConnectionString() {
+        String connectionString = System.getenv("AZURE_SERVICE_BUS_CONNECTION_STRING");
+        if (connectionString != null) return connectionString;
+        return environment.getProperty("azure.service-bus.connection-string");
     }
 
     /**
@@ -56,6 +65,10 @@ public class ElectionService {
      */
     @RabbitListener(queues = "#{electionQueue.name}")
     public void getElectionMessage(String electionMessage) {
+        createElectionFromMessage(electionMessage);
+    }
+
+    private void createElectionFromMessage(String electionMessage) {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 
