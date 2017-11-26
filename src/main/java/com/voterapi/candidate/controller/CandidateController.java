@@ -1,7 +1,5 @@
 package com.voterapi.candidate.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.voterapi.candidate.domain.Candidate;
 import com.voterapi.candidate.domain.CandidateVoterView;
 import com.voterapi.candidate.repository.CandidateRepository;
@@ -9,7 +7,6 @@ import com.voterapi.candidate.repository.ElectionRepository;
 import com.voterapi.candidate.service.CandidateDemoListService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -86,23 +83,6 @@ public class CandidateController {
     }
 
     /**
-     * Consumes message from queue containing election query
-     * Produces candidate list based on election query
-     *
-     * @param requestMessage
-     * @return
-     */
-    @RabbitListener(queues = "voter.rpc.requests")
-    private String getCandidatesMessageRpc(String requestMessage) {
-        logger.debug("Request message: {}", requestMessage);
-        logger.debug("Sending RPC response message with list of candidates...");
-
-        List<CandidateVoterView> candidates = getByElection(requestMessage);
-
-        return serializeToJson(candidates);
-    }
-
-    /**
      * Common MongoDB query to find candidates by election
      *
      * @param election
@@ -121,30 +101,6 @@ public class CandidateController {
                 = mongoTemplate.aggregate(aggregation, Candidate.class, CandidateVoterView.class);
 
         return groupResults.getMappedResults();
-    }
-
-    /**
-     * Serialize list of candidates to JSON
-     *
-     * @param candidates
-     * @return
-     */
-    private String serializeToJson(List<CandidateVoterView> candidates) {
-        ObjectMapper mapper = new ObjectMapper();
-        String jsonInString = "";
-
-        final Map<String, List<CandidateVoterView>> dataMap = new HashMap<>();
-        dataMap.put("candidates", candidates);
-
-        try {
-            jsonInString = mapper.writeValueAsString(dataMap);
-        } catch (JsonProcessingException e) {
-            logger.info(String.valueOf(e));
-        }
-
-        logger.debug("Serialized message payload: {}", jsonInString);
-
-        return jsonInString;
     }
 
     /**

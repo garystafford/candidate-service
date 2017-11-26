@@ -11,8 +11,6 @@ import com.microsoft.azure.servicebus.primitives.ServiceBusException;
 import com.voterapi.candidate.domain.Candidate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.amqp.core.Queue;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.data.rest.core.annotation.HandleAfterCreate;
@@ -24,31 +22,21 @@ import org.springframework.stereotype.Component;
 public class CandidateEventHandler {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
-    private RabbitTemplate rabbitTemplate;
-    private Queue candidateQueue;
     private Environment environment;
 
     @Autowired
-    public CandidateEventHandler(RabbitTemplate rabbitTemplate, Queue candidateQueue, Environment environment) {
-        this.rabbitTemplate = rabbitTemplate;
-        this.candidateQueue = candidateQueue;
+    public CandidateEventHandler(Environment environment) {
         this.environment = environment;
     }
 
     @HandleAfterCreate
     public void handleCandidateSave(Candidate candidate) {
-        sendMessage(candidate);
         sendMessageAzureServiceBus(candidate);
     }
 
-    private void sendMessage(Candidate candidate) {
-        rabbitTemplate.convertAndSend(
-                candidateQueue.getName(), serializeToJson(candidate));
-    }
-
     private void sendMessageAzureServiceBus(Candidate candidate) {
-        String connectionString = getServiceBusConnectionString();
-        String queueName = environment.getProperty("azure.service-bus.queue-name.candidate");
+        String connectionString = environment.getProperty("azure.service-bus.connection-string");
+        String queueName = "candidates.queue";
 
         try {
             IQueueClient queueSendClient = new QueueClient(
@@ -61,12 +49,6 @@ public class CandidateEventHandler {
         } catch (ServiceBusException e) {
             e.printStackTrace();
         }
-    }
-
-    private String getServiceBusConnectionString() {
-        String connectionString = System.getenv("AZURE_SERVICE_BUS_CONNECTION_STRING");
-        if (connectionString != null) return connectionString;
-        return environment.getProperty("azure.service-bus.connection-string");
     }
 
     private String serializeToJson(Candidate candidate) {
