@@ -52,34 +52,12 @@ public class CandidateController {
     }
 
     /**
-     * Returns a summary of all candidates, sorted by last name
-     *
-     * @return
-     */
-    @RequestMapping(value = "/candidates/summary", method = RequestMethod.GET)
-    public ResponseEntity<Map<String, List<CandidateVoterView>>> getCandidates() {
-        Aggregation aggregation = Aggregation.newAggregation(
-                Aggregation.project("firstName", "lastName", "politicalParty", "election")
-                        .andExpression("concat(firstName,' ', lastName)")
-                        .as("fullName").andExclude("_id"),
-                sort(Sort.Direction.ASC, "lastName")
-        );
-
-        AggregationResults<CandidateVoterView> groupResults
-                = mongoTemplate.aggregate(aggregation, Candidate.class, CandidateVoterView.class);
-        List<CandidateVoterView> candidates = groupResults.getMappedResults();
-
-        return new ResponseEntity<>(Collections.singletonMap("candidates", candidates), HttpStatus.OK);
-    }
-
-
-    /**
      * Returns a summary of all candidates, by election, sorted by last name
      *
      * @param election
      * @return
      */
-    @RequestMapping(value = "/candidates/summary/election/{election}", method = RequestMethod.GET)
+    @RequestMapping(value = "/candidates/summary/{election}", method = RequestMethod.GET)
     public ResponseEntity<Map<String, List<CandidateVoterView>>> getCandidatesByElection(@PathVariable("election") String election) {
         List<CandidateVoterView> candidates = getByElection(election);
         return new ResponseEntity<>(Collections.singletonMap("candidates", candidates), HttpStatus.OK);
