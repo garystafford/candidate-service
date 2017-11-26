@@ -27,6 +27,8 @@ spring:
   rabbitmq:
     host: localhost
 ---
+server:
+  port: 8080
 spring:
   data:
     mongodb:
@@ -51,6 +53,8 @@ management:
       enabled: false
     git:
       enabled: false
+server:
+  port: 8080
 spring:
   data:
     mongodb:
@@ -85,6 +89,8 @@ management:
       enabled: false
     git:
       enabled: false
+server:
+  port: 8080
 spring:
   data:
     mongodb:
