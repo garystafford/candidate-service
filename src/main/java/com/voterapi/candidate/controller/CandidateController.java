@@ -76,7 +76,7 @@ public class CandidateController {
      * @param election
      * @return
      */
-    @RequestMapping(value = "/candidates/summary/election/{election}", method = RequestMethod.GET)
+    @RequestMapping(value = "/candidates/summary/{election}", method = RequestMethod.GET)
     public ResponseEntity<Map<String, List<CandidateVoterView>>> getCandidatesByElection(@PathVariable("election") String election) {
         List<CandidateVoterView> candidates = getByElection(election);
         return new ResponseEntity<>(Collections.singletonMap("candidates", candidates), HttpStatus.OK);
