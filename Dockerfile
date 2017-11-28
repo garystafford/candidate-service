@@ -1,6 +1,6 @@
 FROM openjdk:8u131-jdk-alpine
 LABEL maintainer="Gary A. Stafford <garystafford@rochester.rr.com>"
-ENV REFRESHED_AT 2017-11-21
+ENV REFRESHED_AT 2017-11-27
 VOLUME /tmp
 EXPOSE 8080
 RUN set -ex \
@@ -8,7 +8,7 @@ RUN set -ex \
   && apk upgrade \
   && apk add git
 RUN mkdir /candidate \
-  && git clone --depth 1 --branch build-artifacts \
+  && git clone --depth 1 --branch build-artifacts-kub-aks \
       "https://github.com/garystafford/candidate-service.git" /candidate \
   && cd /candidate \
   && mv candidate-service-*.jar candidate-service.jar
