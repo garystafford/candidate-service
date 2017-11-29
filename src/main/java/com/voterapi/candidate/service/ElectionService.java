@@ -21,6 +21,7 @@ import java.util.concurrent.CompletableFuture;
 @Service
 public class ElectionService {
 
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private ElectionRepository electionRepository;
     private Environment environment;
 
@@ -28,6 +29,7 @@ public class ElectionService {
     public ElectionService(ElectionRepository electionRepository, Environment environment) {
         this.electionRepository = electionRepository;
         this.environment = environment;
+
         getAzureServiceBusElectionQueueMessages();
     }
 
@@ -42,7 +44,7 @@ public class ElectionService {
             queueReceiveClient.registerMessageHandler(new MessageHandler(queueReceiveClient, electionRepository),
                     new MessageHandlerOptions(1, false, Duration.ofMinutes(1)));
         } catch (InterruptedException | ServiceBusException e) {
-            e.printStackTrace();
+            logger.info(String.valueOf(e.getStackTrace()));
         }
     }
 
@@ -60,8 +62,8 @@ public class ElectionService {
 
         @Override
         public CompletableFuture<Void> onMessageAsync(IMessage iMessage) {
-            System.out.format("Received message with sq#: %d and lock token: %s.",
-                    iMessage.getSequenceNumber(), iMessage.getLockToken());
+            logger.info(String.format("Received message with sq#: %d and lock token: %s.",
+                    iMessage.getSequenceNumber(), iMessage.getLockToken()));
             return this.client.completeAsync(iMessage.getLockToken()).thenRunAsync(() ->
                     createElectionFromMessage(new String(iMessage.getBody()))
             );
@@ -69,7 +71,7 @@ public class ElectionService {
 
         @Override
         public void notifyException(Throwable throwable, ExceptionPhase exceptionPhase) {
-            System.out.format(exceptionPhase + "-" + throwable.getMessage());
+            logger.info(String.format(exceptionPhase + "-" + throwable.getMessage()));
         }
 
         private void createElectionFromMessage(String electionMessage) {
@@ -84,11 +86,14 @@ public class ElectionService {
             try {
                 election = objectMapper.readValue(electionMessage, mapType);
             } catch (IOException e) {
-                logger.info(String.valueOf(e));
+                logger.info(String.valueOf(e.getStackTrace()));
             }
 
             electionRepository.save(election);
-            logger.debug("Election {} saved to MongoDB", election.toString());
+
+            if (logger.isDebugEnabled()) {
+                logger.debug("Election {} saved to MongoDB", election.toString());
+            }
         }
 
     }

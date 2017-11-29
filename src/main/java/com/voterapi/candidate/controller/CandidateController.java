@@ -5,6 +5,7 @@ import com.voterapi.candidate.domain.CandidateVoterView;
 import com.voterapi.candidate.repository.CandidateRepository;
 import com.voterapi.candidate.repository.ElectionRepository;
 import com.voterapi.candidate.service.CandidateDemoListService;
+import com.voterapi.candidate.service.MessageBusUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,16 +37,19 @@ public class CandidateController {
     private CandidateRepository candidateRepository;
     private ElectionRepository electionRepository;
     private CandidateDemoListService candidateDemoListService;
+    private MessageBusUtilities messageBusUtilities;
 
     @Autowired
     public CandidateController(MongoTemplate mongoTemplate,
                                CandidateRepository candidateRepository,
                                ElectionRepository electionRepository,
-                               CandidateDemoListService candidateDemoListService) {
+                               CandidateDemoListService candidateDemoListService,
+                               MessageBusUtilities messageBusUtilities) {
         this.mongoTemplate = mongoTemplate;
         this.candidateRepository = candidateRepository;
         this.electionRepository = electionRepository;
         this.candidateDemoListService = candidateDemoListService;
+        this.messageBusUtilities = messageBusUtilities;
     }
 
     /**
@@ -111,7 +115,13 @@ public class CandidateController {
     @RequestMapping(value = "/simulation", method = RequestMethod.GET)
     public ResponseEntity<Map<String, String>> getSimulation() {
         candidateRepository.deleteAll();
-        candidateRepository.save(candidateDemoListService.getCandidates());
+        List<Candidate> candidates = candidateDemoListService.getCandidates();
+        candidateRepository.save(candidates);
+
+        for (Candidate candidate : candidates) {
+            messageBusUtilities.sendMessageAzureServiceBus(candidate);
+        }
+
         Map<String, String> result = new HashMap<>();
         result.put("message", "Simulation data created!");
 

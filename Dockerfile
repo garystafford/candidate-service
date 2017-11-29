@@ -1,6 +1,6 @@
 FROM openjdk:8u131-jdk-alpine
 LABEL maintainer="Gary A. Stafford <garystafford@rochester.rr.com>"
-ENV REFRESHED_AT 2017-11-27
+ENV REFRESHED_AT 2017-11-29
 VOLUME /tmp
 EXPOSE 8080
 RUN set -ex \
