@@ -12,13 +12,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.time.Duration;
 import java.util.concurrent.CompletableFuture;
 
-@Service
+@Component
 public class ElectionService {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -95,6 +95,5 @@ public class ElectionService {
                 logger.debug("Election {} saved to MongoDB", election.toString());
             }
         }
-
     }
 }

@@ -10,15 +10,15 @@ import org.springframework.stereotype.Component;
 @RepositoryEventHandler
 public class CandidateEventHandler {
 
-    private MessageBusUtilities messageBusUtilities;
+    private CandidateService candidateService;
 
     @Autowired
-    public CandidateEventHandler(MessageBusUtilities messageBusUtilities) {
-        this.messageBusUtilities = messageBusUtilities;
+    public CandidateEventHandler(CandidateService candidateService) {
+        this.candidateService = candidateService;
     }
 
     @HandleAfterCreate
     public void handleCandidateSave(Candidate candidate) {
-        messageBusUtilities.sendMessageAzureServiceBus(candidate);
+        candidateService.sendMessageAzureServiceBus(candidate);
     }
 }
