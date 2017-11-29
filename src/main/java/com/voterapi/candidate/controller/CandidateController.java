@@ -4,8 +4,6 @@ import com.voterapi.candidate.domain.Candidate;
 import com.voterapi.candidate.domain.CandidateVoterView;
 import com.voterapi.candidate.repository.CandidateRepository;
 import com.voterapi.candidate.repository.ElectionRepository;
-import com.voterapi.candidate.service.CandidateDemoListService;
-import com.voterapi.candidate.service.MessageBusUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -36,20 +33,14 @@ public class CandidateController {
     private MongoTemplate mongoTemplate;
     private CandidateRepository candidateRepository;
     private ElectionRepository electionRepository;
-    private CandidateDemoListService candidateDemoListService;
-    private MessageBusUtilities messageBusUtilities;
 
     @Autowired
     public CandidateController(MongoTemplate mongoTemplate,
                                CandidateRepository candidateRepository,
-                               ElectionRepository electionRepository,
-                               CandidateDemoListService candidateDemoListService,
-                               MessageBusUtilities messageBusUtilities) {
+                               ElectionRepository electionRepository) {
         this.mongoTemplate = mongoTemplate;
         this.candidateRepository = candidateRepository;
         this.electionRepository = electionRepository;
-        this.candidateDemoListService = candidateDemoListService;
-        this.messageBusUtilities = messageBusUtilities;
     }
 
     /**
@@ -105,27 +96,6 @@ public class CandidateController {
                 = mongoTemplate.aggregate(aggregation, Candidate.class, CandidateVoterView.class);
 
         return groupResults.getMappedResults();
-    }
-
-    /**
-     * Populates database with list of candidates
-     *
-     * @return
-     */
-    @RequestMapping(value = "/simulation", method = RequestMethod.GET)
-    public ResponseEntity<Map<String, String>> getSimulation() {
-        candidateRepository.deleteAll();
-        List<Candidate> candidates = candidateDemoListService.getCandidates();
-        candidateRepository.save(candidates);
-
-        for (Candidate candidate : candidates) {
-            messageBusUtilities.sendMessageAzureServiceBus(candidate);
-        }
-
-        Map<String, String> result = new HashMap<>();
-        result.put("message", "Simulation data created!");
-
-        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     @RequestMapping(value = "/candidates/drop", method = RequestMethod.POST)

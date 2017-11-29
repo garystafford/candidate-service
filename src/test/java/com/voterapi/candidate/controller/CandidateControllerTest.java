@@ -51,16 +51,6 @@ public class CandidateControllerTest {
     }
 
     @Test
-    public void getSimulationReturnsExpectedMessage() throws Exception {
-        String expectedResponse =
-                "{\"message\":\"Simulation data created!\"}";
-        ResponseEntity<String> responseEntity =
-                restTemplate.getForEntity("/simulation", String.class);
-        assertThat(responseEntity.getStatusCode().value() == 200).isTrue();
-        assertThat(responseEntity.getBody()).isEqualTo(expectedResponse);
-    }
-
-    @Test
     public void deleteAllCandidatesReturnsExpectedStatusCode() throws Exception {
         ResponseEntity<Void> responseEntity =
                 restTemplate.postForEntity("/candidates/drop", null, Void.class);
