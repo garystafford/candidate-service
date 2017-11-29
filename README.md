@@ -4,12 +4,7 @@
 
 ## Introduction
 
-The Candidate [Spring Boot](https://projects.spring.io/spring-boot/) Service is a RESTful Web Service, backed by [MongoDB](https://www.mongodb.com/). The Candidate service exposes several HTTP API endpoints, listed below. API users can retrieve a list candidates, add a new candidate, and inspect technical information about the running service. API users can also create a sample list of candidates, based on the 2016 US Presidential Election, by calling the `/simulation` endpoint.
-
-The Candidate service is designed to work along with the [Voter Service](https://github.com/garystafford/voter-service), as part of a complete API. The Voter service is dependent on the Candidate service to supply a list of candidates. The Candidate service is called by the Voter service, using one of three methods:
-1. [HTTP-based Synchronous IPC](https://www.nginx.com/blog/building-microservices-inter-process-communication/), when either the Voter service's `/voter/candidates/http/{election}` or `/voter/simulation/http/{election}` endpoints are called.
-2. [Messaging-based Remote Procedure Call (RPC) IPC](https://www.rabbitmq.com/tutorials/tutorial-six-spring-amqp.html), when either the Voter service's `/voter/candidates/rpc/{election}` or `/voter/simulation/rpc/{election}` endpoints are called.
-3. [Messaging-based Eventual Consistency](https://www.rabbitmq.com/tutorials/tutorial-one-spring-amqp.html), when either the Voter service's `/voter/candidates/db/{election}` or `/voter/simulation/db/{election}` endpoints are called.
+The Candidate [Spring Boot](https://projects.spring.io/spring-boot/) Service is a RESTful Web Service, backed by [MongoDB](https://www.mongodb.com/). The Candidate service exposes several HTTP API endpoints, listed below. API users can retrieve a list candidates, add a new candidate, and inspect technical information about the running service.
 
 ![Voter API Architecture](Message_Queue_Diagram_Final.png)
 
@@ -221,6 +216,9 @@ The project's source code is continuously built and tested on every commit to [G
 The Candidate service includes several Spring Boot Profiles, in a multi-profile YAML document: `src/main/resources/application.yml`. The profiles are `default`, `docker-development`, `docker-production`, and `aws-production`. You will need to ensure your MongoDB instance is available at that `host` address and port of the profile you choose, or you may override the profile's properties.
 
 ```yaml
+azure:
+  service-bus:
+    connection-string: <sensitive_set_get_from_env_var>
 endpoints:
   enabled: true
   sensitive: false
@@ -231,6 +229,9 @@ logging:
   level:
     root: INFO
 management:
+  health:
+    mongo:
+      enabled: true
   info:
     build:
       enabled: true
@@ -240,70 +241,16 @@ server:
   port: 8097
   context-path: /candidate
 spring:
+  application:
+    name: Candidate Service
   data:
     mongodb:
-      database: candidates
-      host: localhost
-      port: 27017
-  rabbitmq:
-    host: localhost
+      uri: <sensitive_set_get_from_env_var>
 ---
+server:
+  port: 8080
 spring:
-  data:
-    mongodb:
-      host: mongodb
-  rabbitmq:
-    host: rabbitmq
-  profiles: docker-local
----
----
-endpoints:
-  enabled: false
-  health:
-    enabled: true
-  info:
-    enabled: true
-  sensitive: true
-logging:
-  level:
-    root: WARN
-management:
-  info:
-    build:
-      enabled: false
-    git:
-      enabled: false
-spring:
-  data:
-    mongodb:
-      host: "10.0.1.6"
-  rabbitmq:
-    host: "10.0.1.8"
-  profiles: aws-production
----
-endpoints:
-  enabled: false
-  health:
-    enabled: true
-  info:
-    enabled: true
-  sensitive: true
-logging:
-  level:
-    root: WARN
-management:
-  info:
-    build:
-      enabled: false
-    git:
-      enabled: false
-spring:
-  data:
-    mongodb:
-      host: mongodb
-  rabbitmq:
-    host: rabbitmq
-  profiles: docker-production
+  profiles: kub-aks
 ```
 
 All profile property values may be overridden on the command line, or in a .conf file. For example, to start the Candidate service with the `aws-production` profile, but override the `mongodb.host` value with a new host address, you might use the following command:
