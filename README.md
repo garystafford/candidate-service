@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/garystafford/candidate-service.svg?branch=rabbitmq)](https://travis-ci.org/garystafford/candidate-service) [![Dependencies](https://app.updateimpact.com/badge/817200262778327040/candidate-service.svg?config=compile)](https://app.updateimpact.com/latest/817200262778327040/candidate-service) [![Layers](https://images.microbadger.com/badges/image/garystafford/candidate-service.svg)](https://microbadger.com/images/garystafford/candidate-service "Get your own image badge on microbadger.com") [![Version](https://images.microbadger.com/badges/version/garystafford/candidate-service.svg)](https://microbadger.com/images/garystafford/candidate-service "Get your own version badge on microbadger.com")
+[![Build Status](https://travis-ci.org/garystafford/candidate-service.svg?branch=kub-aks)](https://travis-ci.org/garystafford/candidate-service) [![Dependencies](https://app.updateimpact.com/badge/817200262778327040/candidate-service.svg?config=compile)](https://app.updateimpact.com/latest/817200262778327040/candidate-service) [![Layers](https://images.microbadger.com/badges/image/garystafford/candidate-service.svg)](https://microbadger.com/images/garystafford/candidate-service "Get your own image badge on microbadger.com") [![Version](https://images.microbadger.com/badges/version/garystafford/candidate-service.svg)](https://microbadger.com/images/garystafford/candidate-service "Get your own version badge on microbadger.com")
 
 # Candidate Service
 
@@ -7,9 +7,9 @@
 The Candidate [Spring Boot](https://projects.spring.io/spring-boot/) Service is a RESTful Web Service, backed by [MongoDB](https://www.mongodb.com/). The Candidate service exposes several HTTP API endpoints, listed below. API users can retrieve a list candidates, add a new candidate, and inspect technical information about the running service. API users can also create a sample list of candidates, based on the 2016 US Presidential Election, by calling the `/simulation` endpoint.
 
 The Candidate service is designed to work along with the [Voter Service](https://github.com/garystafford/voter-service), as part of a complete API. The Voter service is dependent on the Candidate service to supply a list of candidates. The Candidate service is called by the Voter service, using one of three methods:
-1. [HTTP-based Synchronous IPC](https://www.nginx.com/blog/building-microservices-inter-process-communication/), when either the Voter service's `/voter/candidates/election/{election}` or `/voter/simulation/election/{election}` endpoints are called.
-2. [Messaging-based Remote Procedure Call (RPC) IPC](https://www.rabbitmq.com/tutorials/tutorial-six-spring-amqp.html), when either the Voter service's `/voter/candidates/rpc/election/{election}` or `/voter/simulation/rpc/election/{election}` endpoints are called.
-3. [Messaging-based Eventual Consistency](https://www.rabbitmq.com/tutorials/tutorial-one-spring-amqp.html), when either the Voter service's `/voter/candidates/db/election/{election}` or `/voter/simulation/db/election/{election}` endpoints are called.
+1. [HTTP-based Synchronous IPC](https://www.nginx.com/blog/building-microservices-inter-process-communication/), when either the Voter service's `/voter/candidates/http/{election}` or `/voter/simulation/http/{election}` endpoints are called.
+2. [Messaging-based Remote Procedure Call (RPC) IPC](https://www.rabbitmq.com/tutorials/tutorial-six-spring-amqp.html), when either the Voter service's `/voter/candidates/rpc/{election}` or `/voter/simulation/rpc/{election}` endpoints are called.
+3. [Messaging-based Eventual Consistency](https://www.rabbitmq.com/tutorials/tutorial-one-spring-amqp.html), when either the Voter service's `/voter/candidates/db/{election}` or `/voter/simulation/db/{election}` endpoints are called.
 
 ![Voter API Architecture](Message_Queue_Diagram_Final.png)
 
@@ -28,15 +28,15 @@ java -jar build/libs/candidate-service-0.3.0.jar
 ## Getting Started with the API
 The easiest way to get started with the Candidate and Voter services API, using [HTTPie](https://httpie.org/) from the command line:  
 1. Create sample candidates: `http http://localhost:8097/candidate/simulation`  
-2. View sample candidates: `http http://localhost:8097/candidate/candidates/summary/election/2016%20Presidential%20Election`  
-3. Create sample voter data: `http http://localhost:8099/voter/simulation/election/2016%20Presidential%20Election`  
+2. View sample candidates: `http http://localhost:8097/candidate/candidates/summary/2016%20Presidential%20Election`  
+3. Create sample voter data: `http http://localhost:8099/voter/simulation/2016%20Presidential%20Election`  
 4. View sample voter results: `http http://localhost:8099/voter/results`
 
 Alternately, for step 3 above, you can use service-to-service RPC IPC with RabbitMQ, to retrieve the candidates:  
-`http http://localhost:8099/voter/simulation/rpc/election/2016%20Presidential%20Election`
+`http http://localhost:8099/voter/simulation/rpc/2016%20Presidential%20Election`
 
 Alternately, for step 3 above, you can use eventual consistency using RabbitMQ, to retrieve the candidates from MongoDB:  
-`http http://localhost:8099/voter/simulation/db/election/2016%20Presidential%20Election`
+`http http://localhost:8099/voter/simulation/db/2016%20Presidential%20Election`
 ## Service Endpoints
 
 The service uses a context path of `/candidate`. All endpoints must be are prefixed with this sub-path.
@@ -46,9 +46,8 @@ Purpose                                                                         
 Create Set of Sample Candidates                                                                                          | GET     | [/candidate/simulation](http://localhost:8097/candidate/simulation)
 Submit New Candidate                                                                                                     | POST    | [/candidate/candidates](http://localhost:8097/candidate/candidates)
 Candidates                                                                                                               | GET     | [/candidate/candidates](http://localhost:8097/candidate/candidates)
-Candidate Summary by Election                                                                                                                 | GET     | [/candidate/candidates/search/findByElectionContains?election={election}&projection=candidateVoterView](http://localhost:8097/candidate/candidates/search/findByElectionContains?election={election}&projection=candidateVoterView)
-Candidate Summary                                                                                                        | GET     | [/candidate/candidates/summary](http://localhost:8097/candidate/candidates/summary)
-Candidate Summary by Election                                                                                                                 | GET     | [/candidate/candidates/summary?election={election}](http://localhost:8097/candidate/candidates/summary/election/{election})
+Candidate Summary by Election                                                                                            | GET     | [/candidate/candidates/search/findByElectionContains?election={election}&projection=candidateVoterView](http://localhost:8097/candidate/candidates/search/findByElectionContains?election={election}&projection=candidateVoterView)
+Candidate Summary by Election                                                                                            | GET     | [/candidate/candidates/summary/{election}](http://localhost:8097/candidate/candidates/summary/{election})
 Service Info                                                                                                             | GET     | [/candidate/info](http://localhost:8097/candidate/info)
 Service Health                                                                                                           | GET     | [/candidate/health](http://localhost:8097/candidate/health)
 Service Metrics                                                                                                          | GET     | [/candidate/metrics](http://localhost:8097/candidate/metrics)
@@ -102,7 +101,7 @@ Using [HTTPie](https://httpie.org/) command line HTTP client.
 }
 ```
 
-`http http://localhost:8097/candidate/candidates/summary/election/2016%20Presidential%20Election`
+`http http://localhost:8097/candidate/candidates/summary/2016%20Presidential%20Election`
 
 ```json
 {
