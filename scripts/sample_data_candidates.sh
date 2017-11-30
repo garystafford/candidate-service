@@ -1,6 +1,6 @@
 #!/bin/bash
 
-url="http://localhost:8097/candidate/candidates"
+url="http://api.voter-demo.com:8080/candidate/candidates"
 
 candidates=(
   '{"firstName":"Mitt","lastName":"Romney","politicalParty":"Republican Party","election":"2012 Presidential Election"}'
