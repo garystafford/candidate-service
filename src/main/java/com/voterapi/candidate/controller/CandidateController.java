@@ -98,13 +98,13 @@ public class CandidateController {
         return groupResults.getMappedResults();
     }
 
-    @RequestMapping(value = "/candidates/drop", method = RequestMethod.POST)
+    @RequestMapping(value = "/drop/candidates", method = RequestMethod.POST)
     public ResponseEntity<Void> deleteAllCandidates() {
         candidateRepository.deleteAll();
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @RequestMapping(value = "/elections/drop", method = RequestMethod.POST)
+    @RequestMapping(value = "/drop/elections", method = RequestMethod.POST)
     public ResponseEntity<Void> deleteAllElections() {
         electionRepository.deleteAll();
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

@@ -14,7 +14,6 @@ The service uses a context path of `/candidate`. All endpoints must be are prefi
 
 Purpose                                                                                                                  | Method  | Endpoint
 ------------------------------------------------------------------------------------------------------------------------ | :------ | :----------------------------------------------------
-Create Set of Sample Candidates                                                                                          | GET     | [/candidate/simulation](http://localhost:8097/candidate/simulation)
 Submit New Candidate                                                                                                     | POST    | [/candidate/candidates](http://localhost:8097/candidate/candidates)
 Candidates                                                                                                               | GET     | [/candidate/candidates](http://localhost:8097/candidate/candidates)
 Candidate Summary by Election                                                                                            | GET     | [/candidate/candidates/search/findByElectionContains?election={election}&projection=candidateVoterView](http://localhost:8097/candidate/candidates/search/findByElectionContains?election={election}&projection=candidateVoterView)
