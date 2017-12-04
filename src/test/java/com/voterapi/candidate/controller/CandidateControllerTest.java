@@ -41,7 +41,9 @@ public class CandidateControllerTest {
                 "John",
                 "Doe",
                 "Test Party",
-                "2017 Test Election"
+                "2017 Test Election",
+                "Test State"
+                "Test experience"
         );
 
         ResponseEntity<Candidate> responseEntity =
