@@ -42,7 +42,7 @@ public class CandidateControllerTest {
                 "Doe",
                 "Test Party",
                 "2017 Test Election",
-                "Test State"
+                "Test State",
                 "Test experience"
         );
 
