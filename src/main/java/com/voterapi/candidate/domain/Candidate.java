@@ -17,6 +17,8 @@ public class Candidate implements Serializable {
     private String lastName;
     private String politicalParty;
     private String election;
+    private String homeState;
+    private String politcalExperience;
 
     Candidate() {
         // unused constructor
@@ -25,11 +27,15 @@ public class Candidate implements Serializable {
     public Candidate(String firstName,
                      String lastName,
                      String politicalParty,
-                     String election) {
+                     String election,
+                     String homeState,
+                     String politcalExperience) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.politicalParty = politicalParty;
         this.election = election;
+        this.homeState = homeState;
+        this.politcalExperience = politcalExperience;
     }
 
     public String getId() {
@@ -54,6 +60,14 @@ public class Candidate implements Serializable {
 
     public String getElection() {
         return election;
+    }
+
+    public String getHomeState() {
+        return homeState;
+    }
+
+    public String getPolitcalExperience() {
+        return politcalExperience;
     }
 
     @Override

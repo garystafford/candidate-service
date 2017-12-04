@@ -1,22 +1,22 @@
 #!/bin/bash
 
-# Drop all candidates and POST new candidates to CosmosDB, through API Gateway
+# Drop all candidates and POST new candidates to CosmosDB,through API Gateway
 
 url="http://api.voter-demo.com:8080/candidate/candidates"
 
 candidates=(
-  '{"firstName":"Mitt","lastName":"Romney","politicalParty":"Republican Party","election":"2012 Presidential Election"}'
-  '{"firstName":"Rocky","lastName":"Anderson","politicalParty":"Justice Party","election":"2012 Presidential Election"}'
-  '{"firstName":"Jill","lastName":"Stein","politicalParty":"Green Party","election":"2012 Presidential Election"}'
-  '{"firstName":"Gary","lastName":"Johnson","politicalParty":"Libertarian Party","election":"2012 Presidential Election"}'
-  '{"firstName":"Virgil","lastName":"Goode","politicalParty":"Constitution Party","election":"2012 Presidential Election"}'
-  '{"firstName":"Barack","lastName":"Obama","politicalParty":"Democratic Party","election":"2012 Presidential Election"}'
-  '{"firstName":"Donald","lastName":"Trump","politicalParty":"Republican Party","election":"2016 Presidential Election"}'
-  '{"firstName":"Chris","lastName":"Keniston","politicalParty":"Veterans Party","election":"2016 Presidential Election"}'
-  '{"firstName":"Jill","lastName":"Stein","politicalParty":"Green Party","election":"2016 Presidential Election"}'
-  '{"firstName":"Gary","lastName":"Johnson","politicalParty":"Libertarian Party","election":"2016 Presidential Election"}'
-  '{"firstName":"Darrell","lastName":"Castle","politicalParty":"Constitution Party","election":"2016 Presidential Election"}'
-  '{"firstName":"Hillary","lastName":"Clinton","politicalParty":"Democratic Party","election":"2016 Presidential Election"}'
+  '{"firstName":"Mitt","lastName":"Romney","politicalParty":"Republican Party","election":"2012 Presidential Election","homeState":"Massachusetts","politcalExperience":"70th Governor of Massachusetts"}'
+  '{"firstName":"Rocky","lastName":"Anderson","politicalParty":"Justice Party","election":"2012 Presidential Election","homeState":"Utah","politcalExperience":"33rd Mayor of Salt Lake City, Utah"}'
+  '{"firstName":"Jill","lastName":"Stein","politicalParty":"Green Party","election":"2012 Presidential Election","homeState":"Massachusetts","politcalExperience":"None"}'
+  '{"firstName":"Gary","lastName":"Johnson","politicalParty":"Libertarian Party","election":"2012 Presidential Election","homeState":"New Mexico","politcalExperience":"29th Governor of New Mexico"}'
+  '{"firstName":"Virgil","lastName":"Goode","politicalParty":"Constitution Party","election":"2012 Presidential Election","homeState":"Virginia","politcalExperience":"U.S. House of Representatives from Virginia, 5th district"}'
+  '{"firstName":"Barack","lastName":"Obama","politicalParty":"Democratic Party","election":"2012 Presidential Election","homeState":"Illinois","politcalExperience":"None"}'
+  '{"firstName":"Donald","lastName":"Trump","politicalParty":"Republican Party","election":"2016 Presidential Election","homeState":"New York","politcalExperience":"Illinois State Senator"}'
+  '{"firstName":"Chris","lastName":"Keniston","politicalParty":"Veterans Party","election":"2016 Presidential Election","homeState":"Texas","politcalExperience":"Air Force Veteran"}'
+  '{"firstName":"Jill","lastName":"Stein","politicalParty":"Green Party","election":"2016 Presidential Election","homeState":"Massachusetts","politcalExperience":"None"}'
+  '{"firstName":"Gary","lastName":"Johnson","politicalParty":"Libertarian Party","election":"2016 Presidential Election","homeState":"New Mexico","politcalExperience":"29th Governor of New Mexico"}'
+  '{"firstName":"Darrell","lastName":"Castle","politicalParty":"Constitution Party","election":"2016 Presidential Election","homeState":"Tennessee","politcalExperience":"Commissioned Officer, U.S. Marine Corps"}'
+  '{"firstName":"Hillary","lastName":"Clinton","politicalParty":"Democratic Party","election":"2016 Presidential Election","homeState":"New York","politcalExperience":"U.S. Senator, New York and 67th US Secretary of State"}'
 )
 
 echo "Dropping all existing candidate documents..."
