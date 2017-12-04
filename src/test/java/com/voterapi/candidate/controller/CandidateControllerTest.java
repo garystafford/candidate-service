@@ -21,19 +21,18 @@ public class CandidateControllerTest {
 
     @Before
     public void setup() {
-        restTemplate.getForEntity("/simulation", String.class);
+        // restTemplate.getForEntity("/simulation", String.class);
     }
 
-    @Test
-    public void getCandidatesReturnsListOfCandidates() throws Exception {
-        String election = "2016 Presidential Election";
-        String expectedCandidates = "{\"candidates\":[{\"fullName\":\"Darrell Castle\"";
-        ResponseEntity<String> responseEntity = this.restTemplate.getForEntity(
-                String.format("/candidates/summary/election/%s", election), String.class);
-        assertThat(responseEntity.getStatusCode().value() == 200).isTrue();
-        assertThat(responseEntity.getBody()).contains(expectedCandidates);
-
-    }
+    // @Test
+    // public void getCandidatesReturnsListOfCandidates() throws Exception {
+    //     String election = "2016 Presidential Election";
+    //     String expectedCandidates = "{\"candidates\":[{\"fullName\":\"Darrell Castle\"";
+    //     ResponseEntity<String> responseEntity = this.restTemplate.getForEntity(
+    //             String.format("/candidates/summary/election/%s", election), String.class);
+    //     assertThat(responseEntity.getStatusCode().value() == 200).isTrue();
+    //     assertThat(responseEntity.getBody()).contains(expectedCandidates);
+    // }
 
     @Test
     public void postCandidateReturnsNewCandidate() throws Exception {
