@@ -9,7 +9,7 @@ info:
     source: "${java.version}"
 logging:
   level:
-    root: DEBUG
+    root: INFO
 management:
   health:
     mongo:
