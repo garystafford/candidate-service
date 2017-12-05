@@ -2,7 +2,7 @@
 
 # Drop all candidates and POST new candidates to CosmosDB,through API Gateway
 
-url="http://api.voter-demo.com:8080/candidate"
+url="https://api.voter-demo.com"
 
 candidates=(
   '{"firstName":"Mitt","lastName":"Romney","politicalParty":"Republican Party","election":"2012 Presidential Election","homeState":"Massachusetts","politcalExperience":"70th Governor of Massachusetts"}'
@@ -19,9 +19,11 @@ candidates=(
   '{"firstName":"Hillary","lastName":"Clinton","politicalParty":"Democratic Party","election":"2016 Presidential Election","homeState":"New York","politcalExperience":"U.S. Senator, New York and 67th US Secretary of State"}'
 )
 
-echo "Dropping all existing candidate documents..."
-curl --request POST \
- --url ${url}/drop/candidates \
+echo "Dropping all existing candidate documents from votes DB..."
+curl --request POST --url ${url}/voter/drop/candidates
+
+echo "Dropping all existing candidate documents from candidates DB..."
+curl --request POST --url ${url}/candidate/drop/candidates
 
 echo ""
 
@@ -29,7 +31,7 @@ for candidate in "${candidates[@]}"
 do
   echo "POSTing ${candidate}"
   curl --request POST \
-   --url ${url}/candidates \
+   --url ${url}/candidate/candidates \
    --header 'content-type: application/json' \
    --data "${candidate}"
 done
