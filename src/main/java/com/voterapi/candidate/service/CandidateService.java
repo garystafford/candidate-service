@@ -22,26 +22,21 @@ public class CandidateService {
     private Environment environment;
 
     public CandidateService(Environment environment) {
-
         this.environment = environment;
-        createQueueClient();
     }
 
-    private void createQueueClient() {
+    public void sendMessageAzureServiceBus(Candidate candidate) {
         String connectionString = environment.getProperty("azure.service-bus.connection-string");
         String queueName = "candidates.queue";
         try {
             queueSendClient = new QueueClient(
                     new ConnectionStringBuilder(connectionString, queueName), ReceiveMode.PEEKLOCK);
+            String message = serializeToJson(candidate);
+            queueSendClient.sendAsync(new Message(message))
+                    .thenRunAsync(queueSendClient::closeAsync);
         } catch (InterruptedException | ServiceBusException e) {
-            logger.info(String.valueOf(e));
+            logger.error(String.valueOf(e.getStackTrace()));
         }
-    }
-
-    public void sendMessageAzureServiceBus(Candidate candidate) {
-        String message = serializeToJson(candidate);
-        queueSendClient.sendAsync(new Message(message))
-                .thenRunAsync(queueSendClient::closeAsync);
     }
 
     protected String serializeToJson(Candidate candidate) {
@@ -51,7 +46,7 @@ public class CandidateService {
         try {
             jsonInString = mapper.writeValueAsString(candidate);
         } catch (JsonProcessingException e) {
-            logger.info(String.valueOf(e));
+            logger.error(String.valueOf(e.getStackTrace()));
         }
 
         if (logger.isDebugEnabled()) {

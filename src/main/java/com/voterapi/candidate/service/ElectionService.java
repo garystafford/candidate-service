@@ -50,9 +50,7 @@ public class ElectionService {
 
     static class MessageHandler implements IMessageHandler {
         private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
         private ElectionRepository electionRepository;
-
         private IQueueClient client;
 
         public MessageHandler(IQueueClient client, ElectionRepository electionRepository) {
@@ -86,7 +84,7 @@ public class ElectionService {
             try {
                 election = objectMapper.readValue(electionMessage, mapType);
             } catch (IOException e) {
-                logger.info(String.valueOf(e.getStackTrace()));
+                logger.error(String.valueOf(e.getStackTrace()));
             }
 
             electionRepository.save(election);
