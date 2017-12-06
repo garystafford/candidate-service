@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Drop all candidates and POST new candidates to CosmosDB,through API Gateway
+# Drop all candidates and POST new candidates to CosmosDB
 
 url="https://api.voter-demo.com"
 
