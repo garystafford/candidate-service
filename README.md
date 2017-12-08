@@ -4,9 +4,9 @@
 
 ## Introduction
 
-The Candidate [Spring Boot](https://projects.spring.io/spring-boot/) Service is a RESTful Web Service, backed by Azure CosmosDB (MongoDB) and Azure Service Bus. The Candidate service exposes several HTTP API endpoints, listed below. API users can retrieve a list candidates, add a new candidate, and inspect technical information about the running service.
+The Candidate [Spring Boot](https://projects.spring.io/spring-boot/) Service is a RESTful Web Service, backed by Azure Cosmos DB (type: MongoDB) and Azure Service Bus. The Candidate service exposes several HTTP API endpoints, listed below. API users can retrieve a list candidates, add a new candidate, and inspect technical information about the running service.
 
-![Voter API Architecture](Message_Queue_Diagram_Final.png)
+![Architecture](AKS_SB_CosmosDB.png)
 
 ## Service Endpoints
 
@@ -37,7 +37,9 @@ http POST http://localhost:8097/candidate/candidates \
   firstName='Mary' \
   lastName='Smith' \
   politicalParty='Test Party' \
-  election='2016 Presidential Election'
+  election='2016 Presidential Election' \
+  homeState='New York' \
+  politcalExperience='Former 2-term Vice President of the United States'
 ```
 
 cURL
@@ -45,7 +47,7 @@ cURL
 ```text
 curl -X POST \
   -H "Content-Type: application/json" \
-  -d '{ "firstName": "Mary", "lastName": "Smith", "politicalParty": "Test Party", "election": "2016 Presidential Election" }' \
+  -d '{ "firstName": "Mary", "lastName": "Smith", "politicalParty": "Test Party", "election": "2016 Presidential Election", "homeState": "New York", "politcalExperience": "Former 2-term Vice President of the United States" }' \
   "http://localhost:8097/candidate/candidates"
 ```
 
@@ -54,7 +56,7 @@ wget
 ```text
 wget --method POST \
   --header 'content-type: application/json' \
-  --body-data '{ "firstName": "Mary", "lastName": "Smith", "politicalParty": "Test Party", "election": "2016 Presidential Election" }' \
+  --body-data '{ "firstName": "Mary", "lastName": "Smith", "politicalParty": "Test Party", "election": "2016 Presidential Election", "homeState": "New York", "politcalExperience": "Former 2-term Vice President of the United States" }' \
   --no-verbose \
   --output-document - http://localhost:8097/candidate/candidates
 ```
@@ -156,10 +158,13 @@ Using [HTTPie](https://httpie.org/) command line HTTP client.
 ```
 
 `http POST http://localhost:8097/candidate/candidates \
-    firstName='John' \
-    lastName='Doe' \
-    politicalParty='Test Party' \
-    election='2016 Presidential Election'`
+  firstName='John' \
+  lastName='Doe' \
+  politicalParty='Test Party' \
+  election='2016 Presidential Election' \
+  homeState='New York' \
+  politcalExperience='Former 2-term Vice President of the United States'
+`
 
 ```json
 
@@ -176,6 +181,8 @@ Using [HTTPie](https://httpie.org/) command line HTTP client.
     "firstName": "John",
     "fullName": "John Doe",
     "lastName": "Doe",
-    "politicalParty": "Test Party"
+    "politicalParty": "Test Party",
+    "homeState": "New York",
+    "politcalExperience": "Former 2-term Vice President of the United States"
 }
 ```
