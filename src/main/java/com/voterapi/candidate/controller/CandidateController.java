@@ -109,5 +109,4 @@ public class CandidateController {
         electionRepository.deleteAll();
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
-
 }

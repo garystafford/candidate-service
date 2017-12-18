@@ -1,10 +1,10 @@
-[![Build Status](https://travis-ci.org/garystafford/candidate-service.svg?branch=kub-aks)](https://travis-ci.org/garystafford/candidate-service) [![Dependencies](https://app.updateimpact.com/badge/817200262778327040/candidate-service.svg?config=compile)](https://app.updateimpact.com/latest/817200262778327040/candidate-service) [![Layers](https://images.microbadger.com/badges/image/garystafford/candidate-service.svg)](https://microbadger.com/images/garystafford/candidate-service "Get your own image badge on microbadger.com") [![Version](https://images.microbadger.com/badges/version/garystafford/candidate-service.svg)](https://microbadger.com/images/garystafford/candidate-service "Get your own version badge on microbadger.com")
+[![Build Status](https://travis-ci.org/garystafford/candidate-service.svg?branch=gke)](https://travis-ci.org/garystafford/candidate-service) [![Dependencies](https://app.updateimpact.com/badge/817200262778327040/candidate-service.svg?config=compile)](https://app.updateimpact.com/latest/817200262778327040/candidate-service) [![Layers](https://images.microbadger.com/badges/image/garystafford/candidate-service.svg)](https://microbadger.com/images/garystafford/candidate-service "Get your own image badge on microbadger.com") [![Version](https://images.microbadger.com/badges/version/garystafford/candidate-service.svg)](https://microbadger.com/images/garystafford/candidate-service "Get your own version badge on microbadger.com")
 
 # Candidate Service
 
 ## Introduction
 
-The Candidate [Spring Boot](https://projects.spring.io/spring-boot/) Service is a RESTful Web Service, backed by Azure Cosmos DB (type: MongoDB) and Azure Service Bus. The Candidate service exposes several HTTP API endpoints, listed below. API users can retrieve a list candidates, add a new candidate, and inspect technical information about the running service.
+The Candidate [Spring Boot](https://projects.spring.io/spring-boot/) Service is a RESTful Web Service, backed by MongoDB Atlas on GCP and RabbitMQ on GCP (using Compose). The Candidate service exposes several HTTP API endpoints, listed below. API users can retrieve a list candidates, add a new candidate, and inspect technical information about the running service.
 
 ![Architecture](AKS_SB_CosmosDB.png)
 
@@ -18,6 +18,8 @@ Submit New Candidate                                                            
 Candidates                                                                                                               | GET     | [/candidate/candidates](http://localhost:8097/candidate/candidates)
 Candidate Summary by Election                                                                                            | GET     | [/candidate/candidates/search/findByElectionContains?election={election}&projection=candidateVoterView](http://localhost:8097/candidate/candidates/search/findByElectionContains?election={election}&projection=candidateVoterView)
 Candidate Summary by Election                                                                                            | GET     | [/candidate/candidates/summary/{election}](http://localhost:8097/candidate/candidates/summary/{election})
+Drop All Elections                                                                                                       | POST    | [/drop/elections](http://localhost:8097/candidate/drop/elections)
+Drop All Candidates                                                                                                      | POST    | [/drop/candidates](http://localhost:8097/candidate/drop/candidates)
 Service Info                                                                                                             | GET     | [/candidate/info](http://localhost:8097/candidate/info)
 Service Health                                                                                                           | GET     | [/candidate/health](http://localhost:8097/candidate/health)
 Service Metrics                                                                                                          | GET     | [/candidate/metrics](http://localhost:8097/candidate/metrics)
