@@ -6,7 +6,7 @@ info:
     source: "${java.version}"
 logging:
   level:
-    root: DEBUG
+    root: INFO
 management:
   health:
     mongo:
@@ -24,12 +24,14 @@ spring:
     name: Candidate Service
   data:
     mongodb:
-      uri: mongodb://localhost:27017/candidates
+      uri: mongodb://localhost:27017/candidate
   rabbitmq:
     host: localhost
 ---
 spring:
   profiles: kub-aks
+  rabbitmq:
+    addresses: localhost
 server:
   port: 8080
 logging:
@@ -43,6 +45,6 @@ management:
       mode: simple
 endpoints:
   env:
-    keys-to-sanitize: .*password.*,.*secret.*, .*spring.data.mongodb.uri.*, .*SPRING_DATA_MONGODB_URI.*, .*spring.rabbitmq.host.*, .*SPRING_RABBITMQ_HOST.*
+    keys-to-sanitize: .*password.*,.*secret.*,.*username.*,.*token.*,.*spring.data.mongodb.uri.*,.*SPRING_DATA_MONGODB_URI.*,.*spring.rabbitmq.username.*,.*SPRING_RABBITMQ_USERNAME.*,.*spring.rabbitmq.password.*,.*SPRING_RABBITMQ_PASSWORD.*
   configprops:
-    keys-to-sanitize: .*password.*,.*secret.*, .*spring.data.mongodb.uri.*, .*SPRING_DATA_MONGODB_URI.*, .*spring.rabbitmq.host.*, .*SPRING_RABBITMQ_HOST.*
+    keys-to-sanitize: .*password.*,.*secret.*,.*username.*,.*token.*,.*spring.data.mongodb.uri.*,.*SPRING_DATA_MONGODB_URI.*,.*spring.rabbitmq.username.*,.*SPRING_RABBITMQ_USERNAME.*,.*spring.rabbitmq.password.*,.*SPRING_RABBITMQ_PASSWORD.*
