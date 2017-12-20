@@ -30,8 +30,6 @@ spring:
 ---
 spring:
   profiles: kub-aks
-  rabbitmq:
-    addresses: localhost
 server:
   port: 8080
 logging:
