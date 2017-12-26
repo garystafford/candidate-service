@@ -37,7 +37,7 @@ Adding a new candidate requires an HTTP `POST` request to the `/candidate/candid
 
 HTTPie
 
-```text
+```bash
 http POST http://localhost:8097/candidate/candidates \
   firstName='Mary' \
   lastName='Smith' \
@@ -49,7 +49,7 @@ http POST http://localhost:8097/candidate/candidates \
 
 cURL
 
-```text
+```bash
 curl -X POST \
   -H "Content-Type: application/json" \
   -d '{ "firstName": "Mary", "lastName": "Smith", "politicalParty": "Test Party", "election": "2016 Presidential Election", "homeState": "New York", "politcalExperience": "Former 2-term Vice President of the United States" }' \
@@ -58,7 +58,7 @@ curl -X POST \
 
 wget
 
-```text
+```bash
 wget --method POST \
   --header 'content-type: application/json' \
   --body-data '{ "firstName": "Mary", "lastName": "Smith", "politicalParty": "Test Party", "election": "2016 Presidential Election", "homeState": "New York", "politcalExperience": "Former 2-term Vice President of the United States" }' \
@@ -70,7 +70,9 @@ wget --method POST \
 
 Using [HTTPie](https://httpie.org/) command line HTTP client.
 
-`http http://localhost:8097/candidate/simulation`
+```bash
+http http://localhost:8097/candidate/simulation
+```
 
 ```json
 {
@@ -78,7 +80,9 @@ Using [HTTPie](https://httpie.org/) command line HTTP client.
 }
 ```
 
-`http http://localhost:8097/candidate/candidates/summary/2016%20Presidential%20Election`
+```bash
+http http://localhost:8097/candidate/candidates/summary/2016%20Presidential%20Election
+```
 
 ```json
 {
@@ -102,7 +106,9 @@ Using [HTTPie](https://httpie.org/) command line HTTP client.
 }
 ```
 
-`http http://localhost:8097/candidate/candidates`
+```bash
+http http://localhost:8097/candidate/candidates
+```
 
 ```json
 {
@@ -162,17 +168,18 @@ Using [HTTPie](https://httpie.org/) command line HTTP client.
 }
 ```
 
-`http POST http://localhost:8097/candidate/candidates \
+```bash
+http POST http://localhost:8097/candidate/candidates \
   firstName='John' \
   lastName='Doe' \
   politicalParty='Test Party' \
   election='2016 Presidential Election' \
   homeState='New York' \
   politcalExperience='Former 2-term Vice President of the United States'
-`
+```
 
 ```json
-
+{
     "_links": {
         "candidate": {
             "href": "http://localhost:8097/candidate/candidates/59054a341b8ebf721accc378{?projection}",
