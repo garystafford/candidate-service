@@ -4,7 +4,7 @@
 
 ## Introduction
 
-The Candidate [Spring Boot](https://projects.spring.io/spring-boot/) Service is a RESTful Web Service, backed by MongoDB, using Atlas on GCP, and RabbitMQ, using CloudAMQP on GCP. The Candidate service exposes several HTTP API endpoints, listed below. API users can retrieve a list candidates, add a new candidate, and inspect technical information about the running service.
+The Candidate [Spring Boot](https://projects.spring.io/spring-boot/) Service is a RESTful Web Service, backed by MongoDB, using Atlas on GCP, and RabbitMQ, using CloudAMQP on GCP. It is part of the Voter API (see diagram below). The Candidate service exposes several HTTP API endpoints, listed below. API users can retrieve a list candidates, add a new candidate, and inspect technical information about the running service.
 
 ![Architecture](GKE_AMPQ_v1.png)
 
@@ -22,8 +22,8 @@ Update Candidate                                                                
 Delete Candidate                                                                                                         | DELETE  | [/candidate/candidates/{id}](http://localhost:8097/candidate/candidates/{id})
 Candidate Summary by Election                                                                                            | GET     | [/candidate/candidates/summary/{election}](http://localhost:8097/candidate/candidates/summary/{election})
 Candidate Summary by Election                                                                                            | GET     | [/candidate/candidates/search/findByElectionContains?election={election}&projection=candidateVoterView](http://localhost:8097/candidate/candidates/search/findByElectionContains?election={election}&projection=candidateVoterView)
-Drop All Elections                                                                                                       | POST    | [/drop/elections](http://localhost:8097/candidate/drop/elections)
-Drop All Candidates                                                                                                      | POST    | [/drop/candidates](http://localhost:8097/candidate/drop/candidates)
+Drop All Elections                                                                                                       | POST    | [/candidate/drop/elections](http://localhost:8097/candidate/drop/elections)
+Drop All Candidates                                                                                                      | POST    | [/candidate/drop/candidates](http://localhost:8097/candidate/drop/candidates)
 Service Info                                                                                                             | GET     | [/candidate/info](http://localhost:8097/candidate/info)
 Service Health                                                                                                           | GET     | [/candidate/health](http://localhost:8097/candidate/health)
 Other [Spring Actuator](http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready) endpoints | GET     | `candidate/actuator`, `candidate/metrics`, `candidate/env`, `candidate/configprops`, etc.
