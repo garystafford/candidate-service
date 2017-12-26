@@ -9,6 +9,8 @@ import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.core.annotation.HandleAfterCreate;
+import org.springframework.data.rest.core.annotation.HandleAfterDelete;
+import org.springframework.data.rest.core.annotation.HandleAfterSave;
 import org.springframework.data.rest.core.annotation.RepositoryEventHandler;
 import org.springframework.stereotype.Component;
 
@@ -18,24 +20,40 @@ public class CandidateEventHandler {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private RabbitTemplate rabbitTemplate;
-    private Queue candidateQueue;
+    private Queue candidateCreatedQueue;
+    private Queue candidateDeletedQueue;
+    private Queue candidateUpdatedQueue;
 
     @Autowired
-    public CandidateEventHandler(RabbitTemplate rabbitTemplate, Queue candidateQueue) {
+    public CandidateEventHandler(RabbitTemplate rabbitTemplate,
+                                 Queue candidateCreatedQueue,
+                                 Queue candidateUpdatedQueue,
+                                 Queue candidateDeletedQueue) {
         this.rabbitTemplate = rabbitTemplate;
-        this.candidateQueue = candidateQueue;
+        this.candidateCreatedQueue = candidateCreatedQueue;
+        this.candidateUpdatedQueue = candidateUpdatedQueue;
+        this.candidateDeletedQueue = candidateDeletedQueue;
+
     }
 
     @HandleAfterCreate
-    public void handleCandidateSave(Candidate candidate) {
-        sendMessage(candidate);
-    }
-
-    private void sendMessage(Candidate candidate) {
+    public void handleAfterCreated(Candidate candidate) {
         rabbitTemplate.convertAndSend(
-                candidateQueue.getName(), serializeToJson(candidate));
+                candidateCreatedQueue.getName(), serializeToJson(candidate));
     }
 
+    @HandleAfterSave
+    public void handleAfterSaved(Candidate candidate) {
+        rabbitTemplate.convertAndSend(
+                candidateUpdatedQueue.getName(), serializeToJson(candidate));
+    }
+
+    @HandleAfterDelete
+    public void handleAfterDeleted(Candidate candidate) {
+        rabbitTemplate.convertAndSend(
+                candidateDeletedQueue.getName(), serializeToJson(candidate));
+    }
+    
     private String serializeToJson(Candidate candidate) {
         ObjectMapper mapper = new ObjectMapper();
         String jsonInString = "";

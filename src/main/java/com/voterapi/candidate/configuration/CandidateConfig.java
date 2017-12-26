@@ -8,12 +8,32 @@ import org.springframework.context.annotation.Configuration;
 public class CandidateConfig {
 
     @Bean
-    public Queue candidateQueue() {
-        return new Queue("candidates.queue");
+    public Queue candidateCreatedQueue() {
+        return new Queue("candidate_created_queue");
     }
 
     @Bean
-    public Queue electionQueue() {
-        return new Queue("elections.queue");
+    public Queue candidateUpdatedQueue() {
+        return new Queue("candidate_updated_queue");
+    }
+
+    @Bean
+    public Queue candidateDeletedQueue() {
+        return new Queue("candidate_deleted_queue");
+    }
+
+    @Bean
+    public Queue electionCreatedQueue() {
+        return new Queue("election_created_queue");
+    }
+
+    @Bean
+    public Queue electionUpdatedQueue() {
+        return new Queue("election_updated_queue");
+    }
+
+    @Bean
+    public Queue electionDeletedQueue() {
+        return new Queue("election_deleted_queue");
     }
 }

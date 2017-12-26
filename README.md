@@ -14,17 +14,20 @@ The service uses a context path of `/candidate`. All endpoints must be are prefi
 
 Purpose                                                                                                                  | Method  | Endpoint
 ------------------------------------------------------------------------------------------------------------------------ | :------ | :----------------------------------------------------
-Submit New Candidate                                                                                                     | POST    | [/candidate/candidates](http://localhost:8097/candidate/candidates)
-Candidates                                                                                                               | GET     | [/candidate/candidates](http://localhost:8097/candidate/candidates)
-Candidate Summary by Election                                                                                            | GET     | [/candidate/candidates/search/findByElectionContains?election={election}&projection=candidateVoterView](http://localhost:8097/candidate/candidates/search/findByElectionContains?election={election}&projection=candidateVoterView)
+List All Service Endpoints                                                                                               | GET     | [/candidate/mappings](http://localhost:8097/candidate/mappings)
+Create Candidate                                                                                                         | POST    | [/candidate/candidates](http://localhost:8097/candidate/candidates)
+Read Candidate                                                                                                           | GET     | [/candidate/candidates/{id}](http://localhost:8097/candidate/candidates/{id})
+Read Candidates                                                                                                          | GET     | [/candidate/candidates](http://localhost:8097/candidate/candidates)
+Update Candidate                                                                                                         | PUT     | [/candidate/candidates/{id}](http://localhost:8097/candidate/candidates/{id})
+Delete Candidate                                                                                                         | DELETE  | [/candidate/candidates/{id}](http://localhost:8097/candidate/candidates/{id})
 Candidate Summary by Election                                                                                            | GET     | [/candidate/candidates/summary/{election}](http://localhost:8097/candidate/candidates/summary/{election})
+Candidate Summary by Election                                                                                            | GET     | [/candidate/candidates/search/findByElectionContains?election={election}&projection=candidateVoterView](http://localhost:8097/candidate/candidates/search/findByElectionContains?election={election}&projection=candidateVoterView)
 Drop All Elections                                                                                                       | POST    | [/drop/elections](http://localhost:8097/candidate/drop/elections)
 Drop All Candidates                                                                                                      | POST    | [/drop/candidates](http://localhost:8097/candidate/drop/candidates)
 Service Info                                                                                                             | GET     | [/candidate/info](http://localhost:8097/candidate/info)
 Service Health                                                                                                           | GET     | [/candidate/health](http://localhost:8097/candidate/health)
-Service Metrics                                                                                                          | GET     | [/candidate/metrics](http://localhost:8097/candidate/metrics)
-Other [Spring Actuator](http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready) endpoints | GET     | `/candidate/mappings`, `/candidate/env`, `/candidate/configprops`, etc.
-Other [HATEOAS](https://spring.io/guides/gs/rest-hateoas) endpoints for `/candidate/candidates`                                    | Various | DELETE, PATCH, PUT, page sort, size, etc.
+Other [Spring Actuator](http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready) endpoints | GET     | `candidate/actuator`, `candidate/metrics`, `candidate/env`, `candidate/configprops`, etc.
+Other [HATEOAS](https://spring.io/guides/gs/rest-hateoas) endpoints for `/candidate/candidates`                                    | Various | page sort, size, etc.
 
 The [HAL Browser](https://github.com/mikekelly/hal-browser) API browser for the `hal+json` media type is installed alongside the service. It can be accessed at `http://localhost:8097/candidate/actuator/`.
 

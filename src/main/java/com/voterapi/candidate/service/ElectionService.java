@@ -28,10 +28,10 @@ public class ElectionService {
     /**
      * Consumes a new election message, deserialize, and save to MongoDB
      *
-     * @param electionMessage
+     * @param electionCreatedMessage
      */
-    @RabbitListener(queues = "#{electionQueue.name}")
-    public void getElectionMessage(String electionMessage) {
+    @RabbitListener(queues = "#{electionCreatedQueue.name}")
+    public void getElectionCreatedMessage(String electionCreatedMessage) {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 
@@ -41,7 +41,7 @@ public class ElectionService {
         Election election = null;
 
         try {
-            election = objectMapper.readValue(electionMessage, mapType);
+            election = objectMapper.readValue(electionCreatedMessage, mapType);
         } catch (IOException e) {
             logger.error(String.valueOf(e));
         }

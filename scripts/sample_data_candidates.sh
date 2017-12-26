@@ -1,8 +1,9 @@
 #!/bin/bash
 
-# Drop all candidates and POST new candidates to CosmosDB
+# drop all candidates and post new candidates to mongodb or cosmos db
 
-url="https://api.voter-demo.com"
+#url="https://api.voter-demo.com"
+ url="http://localhost:8097"
 
 candidates=(
   '{"firstName":"Mitt","lastName":"Romney","politicalParty":"Republican Party","election":"2012 Presidential Election","homeState":"Massachusetts","politcalExperience":"70th Governor of Massachusetts"}'
@@ -20,9 +21,11 @@ candidates=(
 )
 
 echo "Dropping all existing candidate documents from votes DB..."
+echo "POSTing ${url}/voter/drop/candidates"
 curl --request POST --url ${url}/voter/drop/candidates
 
 echo "Dropping all existing candidate documents from candidates DB..."
+echo "POSTing ${url}/candidate/drop/candidates"
 curl --request POST --url ${url}/candidate/drop/candidates
 
 echo ""
