@@ -53,7 +53,7 @@ public class CandidateEventHandler {
         rabbitTemplate.convertAndSend(
                 candidateDeletedQueue.getName(), serializeToJson(candidate));
     }
-    
+
     private String serializeToJson(Candidate candidate) {
         ObjectMapper mapper = new ObjectMapper();
         String jsonInString = "";

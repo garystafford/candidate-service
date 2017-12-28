@@ -17,7 +17,6 @@ import java.io.IOException;
 public class ElectionService {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
     private ElectionRepository electionRepository;
 
     @Autowired

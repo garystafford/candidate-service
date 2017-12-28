@@ -60,7 +60,6 @@ public class CandidateController {
         AggregationResults<CandidateVoterView> groupResults
                 = mongoTemplate.aggregate(aggregation, Candidate.class, CandidateVoterView.class);
         List<CandidateVoterView> candidates = groupResults.getMappedResults();
-
         return new ResponseEntity<>(Collections.singletonMap("candidates", candidates), HttpStatus.OK);
     }
 
@@ -94,7 +93,6 @@ public class CandidateController {
 
         AggregationResults<CandidateVoterView> groupResults
                 = mongoTemplate.aggregate(aggregation, Candidate.class, CandidateVoterView.class);
-
         return groupResults.getMappedResults();
     }
 
